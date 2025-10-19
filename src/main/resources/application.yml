@@ -14,18 +14,18 @@ spring:
   datasource:
     username: postgres
     password: root
-    url: jdbc:postgresql://localhost:5432/tower_data
+    url: jdbc:postgresql://localhost:5432/kertaskerja_towerdata
     hikari:
       connection-timeout: 2000
       maximum-pool-size: 5
 
 flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
+  enabled: true
+  locations: classpath:db/migration
+  baseline-on-migrate: true
 
 kertaskerja:
-	status: Tower Data UP!
+  status: Tower Data UP!
 
 logging:
   level:
@@ -35,7 +35,7 @@ logging:
     root: INFO
 
 management:
-	endpoints:
-		web:
-			exposure:
-				include: mappings
+  endpoints:
+    web:
+      exposure:
+        include: mappings
