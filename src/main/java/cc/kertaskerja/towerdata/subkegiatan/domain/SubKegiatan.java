@@ -19,8 +19,8 @@ public record SubKegiatan(
     @Column("nama_subkegiatan")
     String namaSubKegiatan,
 
-    @Column("status")
-    String status,
+    @Column("kode_pemda")
+    String kodePemda,
 
     @Column("penunjang")
     Boolean penunjang,
@@ -32,16 +32,16 @@ public record SubKegiatan(
     Instant lastModifiedDate
 ) {
     public static SubKegiatan of (
-            String kodeSubKegiatan,
-            String namaSubKegiatan,
-            String status,
+            String 	kodeSubKegiatan,
+            String 	namaSubKegiatan,
+            String 	kodePemda,
             Boolean penunjang
     ) {
         return new SubKegiatan(
                 null,
                 kodeSubKegiatan,
                 namaSubKegiatan,
-                status,
+                kodePemda,
                 penunjang,
                 null,
                 null

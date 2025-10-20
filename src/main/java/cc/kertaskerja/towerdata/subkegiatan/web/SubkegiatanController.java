@@ -77,7 +77,7 @@ public class SubkegiatanController {
                 id,
                 request.kodeSubKegiatan(),
                 request.namaSubKegiatan(),
-                request.status(),
+                request.kodePemda(),
                 request.penunjang(),
                 existingSubKegiatan.createdDate(),
                 null
@@ -91,7 +91,7 @@ public class SubkegiatanController {
         SubKegiatan subKegiatan = SubKegiatan.of(
                 request.kodeSubKegiatan(),
                 request.namaSubKegiatan(),
-                request.status(),
+                request.kodePemda(),
                 request.penunjang()
         );
         SubKegiatan saved = subKegiatanService.tambahSubKegiatan(subKegiatan);

@@ -16,9 +16,9 @@ public record SubkegiatanRequest(
         @NotEmpty(message = "Nama Sub Kegiatan tidak boleh kosong")
         String namaSubKegiatan,
 
-        @NotNull(message = "Status tidak boleh kosong")
-        @NotEmpty(message = "Status tidak boleh kosong")
-        String status,
+        @NotNull(message = "Kode Pemda tidak boleh kosong")
+        @NotEmpty(message = "Kode Pemda tidak boleh kosong")
+        String kodePemda,
 
         @NotNull(message = "Penunjang tidak boleh kosong")
         Boolean penunjang
