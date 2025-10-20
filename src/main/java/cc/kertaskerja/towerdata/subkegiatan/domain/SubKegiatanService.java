@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.subkegiatan.domain;
 
-import cc.kertaskerja.towerdata.subkegiatan.domain.exception.SubKegiatanAlreadyExistException;
 import cc.kertaskerja.towerdata.subkegiatan.domain.exception.SubKegiatanNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +32,7 @@ public class SubKegiatanService {
 
     public SubKegiatan detailSubKegiatan(Long id) {
         return subKegiatanRepository.findById(id)
-                .orElseThrow(() -> new SubKegiatanAlreadyExistException(id));
+                .orElseThrow(() -> new SubKegiatanNotFoundException(id));
     }
 
     public SubKegiatan tambahSubKegiatan(SubKegiatan subKegiatan) {

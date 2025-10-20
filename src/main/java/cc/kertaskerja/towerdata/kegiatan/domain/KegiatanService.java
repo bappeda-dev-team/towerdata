@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.kegiatan.domain;
 
-import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanAlreadyExistException;
 import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanNotFoundException;
 
 import org.springframework.data.domain.Page;
@@ -34,7 +33,7 @@ public class KegiatanService {
 
     public Kegiatan detailKegiatan(Long id) {
         return kegiatanRepository.findById(id)
-                .orElseThrow(() -> new KegiatanAlreadyExistException(id));
+                .orElseThrow(() -> new KegiatanNotFoundException(id));
     }
 
     public Kegiatan tambahKegiatan(Kegiatan kegiatan) {
