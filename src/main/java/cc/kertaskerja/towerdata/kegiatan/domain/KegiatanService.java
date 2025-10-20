@@ -1,8 +1,7 @@
 package cc.kertaskerja.towerdata.kegiatan.domain;
 
+import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanAlreadyExistException;
 import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanNotFoundException;
-import cc.kertaskerja.towerdata.subkegiatan.domain.exception.SubKegiatanAlreadyExistException;
-import cc.kertaskerja.towerdata.subkegiatan.domain.exception.SubKegiatanNotFoundException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +34,7 @@ public class KegiatanService {
 
     public Kegiatan detailKegiatan(Long id) {
         return kegiatanRepository.findById(id)
-                .orElseThrow(() -> new SubKegiatanAlreadyExistException(id));
+                .orElseThrow(() -> new KegiatanAlreadyExistException(id));
     }
 
     public Kegiatan tambahKegiatan(Kegiatan kegiatan) {
@@ -44,7 +43,7 @@ public class KegiatanService {
 
     public Kegiatan ubahKegiatan(Long id, Kegiatan kegiatan) {
         if (!kegiatanRepository.existsById(id)) {
-            throw new SubKegiatanNotFoundException(id);
+            throw new KegiatanNotFoundException(id);
         }
 
         return kegiatanRepository.save(kegiatan);
