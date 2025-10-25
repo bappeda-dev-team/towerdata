@@ -104,6 +104,21 @@ public class SubkegiatanController {
         return ResponseEntity.created(location).body(saved);
     }
 
+    @PostMapping("create/batch")
+    public ResponseEntity<List<SubKegiatan>> postBatch(@Valid @RequestBody List<SubkegiatanRequest> requests) {
+        List<SubKegiatan> savedSubKegiatans = requests.stream()
+                .map(request -> SubKegiatan.of(
+                        request.kodeSubKegiatan(),
+                        request.namaSubKegiatan(),
+                        request.kodePemda(),
+                        request.penunjang()
+                ))
+                .map(subKegiatanService::tambahSubKegiatan)
+                .toList();
+
+        return ResponseEntity.ok(savedSubKegiatans);
+    }
+
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
