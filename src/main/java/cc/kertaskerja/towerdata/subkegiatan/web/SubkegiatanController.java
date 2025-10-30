@@ -2,6 +2,8 @@ package cc.kertaskerja.towerdata.subkegiatan.web;
 
 import cc.kertaskerja.towerdata.subkegiatan.domain.SubKegiatan;
 import cc.kertaskerja.towerdata.subkegiatan.domain.SubKegiatanService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,7 +13,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("subkegiatan")
@@ -87,31 +88,49 @@ public class SubkegiatanController {
     }
 
     @PostMapping
-    public ResponseEntity<SubKegiatan> post(@Valid @RequestBody SubkegiatanRequest request) {
-        SubKegiatan subKegiatan = SubKegiatan.of(
-                request.kodeSubKegiatan(),
-                request.namaSubKegiatan(),
-                request.kodePemda(),
-                request.penunjang()
-        );
-        SubKegiatan saved = subKegiatanService.tambahSubKegiatan(subKegiatan);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(saved.id())
-                .toUri();
+    public ResponseEntity<?> post(@Valid @RequestBody Object request) {
+        ObjectMapper mapper = new ObjectMapper();
 
-        return ResponseEntity.created(location).body(saved);
+        if (request instanceof List) {
+            List<SubkegiatanRequest> requests = mapper.convertValue(request, new TypeReference<List<SubkegiatanRequest>>() {});
+            List<SubKegiatan> savedSubKegiatans = requests.stream()
+                    .map(req -> SubKegiatan.of(
+                            req.kodeSubKegiatan(),
+                            req.namaSubKegiatan(),
+                            req.kodePemda(),
+                            req.penunjang()
+                    ))
+                    .map(subKegiatanService::tambahSubKegiatan)
+                    .toList();
+
+            return ResponseEntity.ok(savedSubKegiatans);
+        } else {
+            SubkegiatanRequest req = mapper.convertValue(request, SubkegiatanRequest.class);
+            SubKegiatan subKegiatan = SubKegiatan.of(
+                    req.kodeSubKegiatan(),
+                    req.namaSubKegiatan(),
+                    req.kodePemda(),
+                    req.penunjang()
+            );
+            SubKegiatan saved = subKegiatanService.tambahSubKegiatan(subKegiatan);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(saved.id())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(saved);
+        }
     }
 
-    @PostMapping("create/batch")
-    public ResponseEntity<List<SubKegiatan>> postBatch(@Valid @RequestBody List<SubkegiatanRequest> requests) {
+    @PostMapping("/create/batch")
+    public ResponseEntity<List<SubKegiatan>> postBatch(@Valid @RequestBody List<SubkegiatanBatchRequest> requests) {
         List<SubKegiatan> savedSubKegiatans = requests.stream()
-                .map(request -> SubKegiatan.of(
-                        request.kodeSubKegiatan(),
-                        request.namaSubKegiatan(),
-                        request.kodePemda(),
-                        request.penunjang()
+                .map(req -> SubKegiatan.of(
+                        req.kodeSubKegiatan(),
+                        req.namaSubKegiatan(),
+                        "DEFAULT", // default kode pemda
+                        false // default penunjang
                 ))
                 .map(subKegiatanService::tambahSubKegiatan)
                 .toList();
@@ -119,6 +138,7 @@ public class SubkegiatanController {
         return ResponseEntity.ok(savedSubKegiatans);
     }
 
+    
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
