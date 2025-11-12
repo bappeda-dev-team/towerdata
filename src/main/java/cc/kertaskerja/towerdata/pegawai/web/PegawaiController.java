@@ -3,6 +3,9 @@ package cc.kertaskerja.towerdata.pegawai.web;
 import java.net.URI;
 import java.util.List;
 
+import cc.kertaskerja.towerdata.opd.domain.OpdService;
+import cc.kertaskerja.towerdata.pegawai.web.response.PegawaiResponse;
+import cc.kertaskerja.towerdata.pegawai.web.response.PegawaiSearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +29,11 @@ import jakarta.validation.Valid;
 @RequestMapping("pegawai")
 public class PegawaiController {
 	private final PegawaiService pegawaiService;
-	
-	public PegawaiController(PegawaiService pegawaiService) {
+	private final OpdService opdService;
+
+	public PegawaiController(PegawaiService pegawaiService, OpdService opdService) {
 		this.pegawaiService = pegawaiService;
+		this.opdService = opdService;
 	}
 	
 	@GetMapping("detail/{id}")
@@ -54,7 +59,9 @@ public class PegawaiController {
                 .map(pegawai -> new PegawaiSearchResponse(
                         pegawai.kodePegawai(),
                         pegawai.namaPegawai(),
-                        pegawai.penunjang()
+                        pegawai.penunjang(),
+                        pegawai.opdId(),
+                        pegawai.namaRolePegawai()
                 ))
                 .toList();
     }
@@ -71,7 +78,26 @@ public class PegawaiController {
                 .map(pegawai -> new PegawaiSearchResponse(
                         pegawai.kodePegawai(),
                         pegawai.namaPegawai(),
-                        pegawai.penunjang()
+                        pegawai.penunjang(),
+                        pegawai.opdId(),
+                        pegawai.namaRolePegawai()
+                ))
+                .toList();
+    }
+
+    @GetMapping("kode/{kodePegawai}")
+    public List<PegawaiSearchResponse> getPegawaiByKodePegawai(
+            @PathVariable("kodePegawai") String kodePegawai
+    ) {
+        List<Pegawai> pegawais = pegawaiService.getPegawaiByKodePegawai(kodePegawai);
+
+        return pegawais.stream()
+                .map(pegawai -> new PegawaiSearchResponse(
+                        pegawai.kodePegawai(),
+                        pegawai.namaPegawai(),
+                        pegawai.penunjang(),
+                        pegawai.opdId(),
+                        pegawai.namaRolePegawai()
                 ))
                 .toList();
     }
@@ -86,7 +112,9 @@ public class PegawaiController {
                 request.kodePegawai(),
                 request.namaPegawai(),
                 request.kodePemda(),
+                request.opdId(),
                 request.penunjang(),
+                request.namaRolePegawai(),
                 existingPegawai.createdDate(),
                 null
         );
@@ -96,13 +124,15 @@ public class PegawaiController {
 	
 	@PostMapping
     public ResponseEntity<Pegawai> post(@Valid @RequestBody PegawaiRequest request) {
-        Pegawai opd = Pegawai.of(
+        Pegawai pegawai = Pegawai.of(
                 request.kodePegawai(),
                 request.namaPegawai(),
                 request.kodePemda(),
-                request.penunjang()
+                request.opdId(),
+                request.penunjang(),
+                request.namaRolePegawai()
         );
-        Pegawai saved = pegawaiService.tambahPegawai(opd);
+        Pegawai saved = pegawaiService.tambahPegawai(pegawai);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

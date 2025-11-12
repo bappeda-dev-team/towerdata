@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
@@ -27,8 +28,14 @@ public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
     @NonNull
     Page<Pegawai> findAll(@NonNull Pageable pageable);
 
+    @NonNull
+    Page<Pegawai> findByOpdId(@NonNull Long opdId, @NonNull Pageable pageable);
+    
+    List<Pegawai> findByKodePegawai(String kodePegawai);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM pegawai WHERE id = :id")
     void deleteById(@NonNull Long id);
+
 }

@@ -22,8 +22,14 @@ public record Pegawai(
         @Column("kode_pemda")
         String kodePemda,
 
+        @Column("opd_id")
+        Long opdId,
+
         @Column("penunjang")
         Boolean penunjang,
+
+        @Column("nama_role_pegawai")
+        String namaRolePegawai,
 
         @CreatedDate
         Instant createdDate,
@@ -35,14 +41,18 @@ public record Pegawai(
             String kodePegawai,
             String namaPegawai,
             String kodePemda,
-            Boolean penunjang
+            Long opdId,
+            Boolean penunjang,
+            String namaRolePegawai
     ) {
         return new Pegawai (
                 null,
                 kodePegawai,
                 namaPegawai,
                 kodePemda,
+                opdId,
                 penunjang,
+                namaRolePegawai,
                 null,
                 null
         );

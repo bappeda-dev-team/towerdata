@@ -6,6 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 @Service
 public class OpdService {
     private OpdRepository opdRepository;
@@ -28,6 +31,11 @@ public class OpdService {
         } else {
             return opdRepository.findByPenunjang(penunjangFilter, pageable);
         }
+    }
+
+    public List<Opd> findAll() {
+        return StreamSupport.stream(opdRepository.findAll().spliterator(), false)
+                .toList();
     }
 
     public Opd detailOpd(Long id) {

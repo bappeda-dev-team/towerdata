@@ -21,6 +21,9 @@ public record PegawaiRequest(
         String kodePemda,
 
         @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang
+        Boolean penunjang,
+        
+        @NotNull(message = "Nama role tidak boleh kosong")
+        String namaRolePegawai
 ) {
 }

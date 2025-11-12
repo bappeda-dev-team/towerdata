@@ -2,6 +2,11 @@ package cc.kertaskerja.towerdata.opd.web;
 
 import cc.kertaskerja.towerdata.opd.domain.Opd;
 import cc.kertaskerja.towerdata.opd.domain.OpdService;
+import cc.kertaskerja.towerdata.opd.web.response.OpdSearchResponse;
+import cc.kertaskerja.towerdata.opd.web.response.OpdSelectionResponse;
+import cc.kertaskerja.towerdata.pegawai.domain.Pegawai;
+import cc.kertaskerja.towerdata.pegawai.domain.PegawaiService;
+import cc.kertaskerja.towerdata.pegawai.web.response.PegawaiResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -16,17 +21,24 @@ import java.util.List;
 @RequestMapping("opd")
 public class OpdController {
     private final OpdService opdService;
+    private final PegawaiService pegawaiService;
 
-    public OpdController(OpdService opdService) {
+    public OpdController(OpdService opdService, PegawaiService pegawaiService) {
         this.opdService = opdService;
+        this.pegawaiService = pegawaiService;
     }
-
+    
+    /**
+     * 
+     * @param id
+     * @return satu data opd
+     */
     @GetMapping("detail/{id}")
     public Opd getById(@PathVariable("id") Long id) {
         return opdService.detailOpd(id);
     }
 
-    @GetMapping("search")
+    @GetMapping("/detail/cari")
     public List<OpdSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeOpd,
             @RequestParam(value = "nama", required = false) String namaOpd,
@@ -49,7 +61,9 @@ public class OpdController {
                 .toList();
     }
 
-    @GetMapping("penunjang/search")
+
+
+    @GetMapping("detail/penunjang/cari")
     public List<OpdSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -62,6 +76,43 @@ public class OpdController {
                         opd.kodeOpd(),
                         opd.namaOpd(),
                         opd.penunjang()
+                ))
+                .toList();
+    }
+
+    /**
+     * pilih opd dropdown
+     * @return list semua data opd
+     */
+    @GetMapping("detail/pilihOpd")
+    public List<OpdSelectionResponse> getOpdSelection() {
+        return opdService.findAll()
+                .stream()
+                .map(opd -> new OpdSelectionResponse(
+                        opd.id(),
+                        opd.kodeOpd(),
+                        opd.namaOpd()
+                ))
+                .toList();
+    }
+
+    @GetMapping("detail/{opdId}/pegawai/kode/{kodePegawai}")
+    public List<PegawaiResponse> getPegawaiByKodePegawaiInOpd(
+            @PathVariable("opdId") Long opdId,
+            @PathVariable("kodePegawai") String kodePegawai
+    ) {
+        List<Pegawai> pegawais = pegawaiService.getPegawaiByKodePegawai(kodePegawai);
+        String namaOpd = opdService.detailOpd(opdId).namaOpd();
+
+        return pegawais.stream()
+                .filter(pegawai -> pegawai.opdId().equals(opdId))
+                .map(pegawai -> new PegawaiResponse(
+                        pegawai.kodePegawai(),
+                        pegawai.namaPegawai(),
+                        pegawai.penunjang(),
+                        pegawai.opdId(),
+                        namaOpd,
+                        pegawai.namaRolePegawai()
                 ))
                 .toList();
     }
