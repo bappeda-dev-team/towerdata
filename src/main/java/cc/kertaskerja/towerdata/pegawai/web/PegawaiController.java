@@ -84,23 +84,6 @@ public class PegawaiController {
                 ))
                 .toList();
     }
-
-    @GetMapping("kode/{kodePegawai}")
-    public List<PegawaiSearchResponse> getPegawaiByKodePegawai(
-            @PathVariable("kodePegawai") String kodePegawai
-    ) {
-        List<Pegawai> pegawais = pegawaiService.getPegawaiByKodePegawai(kodePegawai);
-
-        return pegawais.stream()
-                .map(pegawai -> new PegawaiSearchResponse(
-                        pegawai.kodePegawai(),
-                        pegawai.namaPegawai(),
-                        pegawai.penunjang(),
-                        pegawai.opdId(),
-                        pegawai.namaRolePegawai()
-                ))
-                .toList();
-    }
 	
 	@PutMapping("update/{id}")
     public Pegawai put(@PathVariable("id") Long id, @Valid @RequestBody PegawaiRequest request) {

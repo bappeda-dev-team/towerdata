@@ -1,0 +1,1 @@
+ALTER TABLE pegawai ADD COLUMN IF NOT EXISTS nama_role_pegawai VARCHAR(255);
