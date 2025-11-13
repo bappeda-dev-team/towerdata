@@ -25,6 +25,9 @@ public record BidangUrusan(
         @Column("penunjang")
         Boolean penunjang,
 
+        @Column("opd_id")
+        Long opdId,
+
         @CreatedDate
         Instant createdDate,
 
@@ -35,7 +38,8 @@ public record BidangUrusan(
     		String kodeBidangUrusan,
             String namaBidangUrusan,
             String kodePemda,
-            Boolean penunjang
+            Boolean penunjang,
+            Long opdId
     ) {
         return new BidangUrusan(
                 null,
@@ -43,6 +47,7 @@ public record BidangUrusan(
                 namaBidangUrusan,
                 kodePemda,
                 penunjang,
+                opdId,
                 null,
                 null
         );

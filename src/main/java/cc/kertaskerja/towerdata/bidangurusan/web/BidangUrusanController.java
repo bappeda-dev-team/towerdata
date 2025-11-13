@@ -36,7 +36,7 @@ public class BidangUrusanController {
         return bidangUrusanService.detailBidangUrusan(id);
     }
 	
-	@GetMapping("search")
+	@GetMapping("cari")
     public List<BidangUrusanSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeBidangUrusan,
             @RequestParam(value = "nama", required = false) String namaBidangUrusan,
@@ -54,12 +54,13 @@ public class BidangUrusanController {
                 .map(bidangurusan -> new BidangUrusanSearchResponse(
                         bidangurusan.kodeBidangUrusan(),
                         bidangurusan.namaBidangUrusan(),
-                        bidangurusan.penunjang()
+                        bidangurusan.penunjang(),
+                        bidangurusan.opdId()
                 ))
                 .toList();
     }
 	
-	@GetMapping("penunjang/search")
+	@GetMapping("penunjang/cari")
     public List<BidangUrusanSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -71,7 +72,8 @@ public class BidangUrusanController {
                 .map(bidangurusan -> new BidangUrusanSearchResponse(
                         bidangurusan.kodeBidangUrusan(),
                         bidangurusan.namaBidangUrusan(),
-                        bidangurusan.penunjang()
+                        bidangurusan.penunjang(),
+                        bidangurusan.opdId()
                 ))
                 .toList();
     }
@@ -87,6 +89,7 @@ public class BidangUrusanController {
                 request.namaBidangUrusan(),
                 request.kodePemda(),
                 request.penunjang(),
+                request.opdId(),
                 existingBidangUrusan.createdDate(),
                 null
         );
@@ -100,7 +103,8 @@ public class BidangUrusanController {
                 request.kodeBidangUrusan(),
                 request.namaBidangUrusan(),
                 request.kodePemda(),
-                request.penunjang()
+                request.penunjang(),
+                request.opdId()
         );
         BidangUrusan saved = bidangUrusanService.tambahBidangUrusan(bidangUrusan);
         URI location = ServletUriComponentsBuilder

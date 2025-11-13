@@ -27,6 +27,14 @@ public interface BidangUrusanRepository extends CrudRepository<BidangUrusan, Lon
     @NonNull
     Page<BidangUrusan> findAll(@NonNull Pageable pageable);
 
+    @NonNull
+    Page<BidangUrusan> findByOpdId(@NonNull Long opdId, @NonNull Pageable pageable);
+
+    @NonNull
+    Page<BidangUrusan> findByOpdIdAndPenunjang(@NonNull Long opdId, @NonNull Boolean penunjang, @NonNull Pageable pageable);
+
+    boolean existsByOpdId(@NonNull Long opdId);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM bidang_urusan WHERE id = :id")

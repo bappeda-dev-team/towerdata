@@ -7,6 +7,8 @@ import cc.kertaskerja.towerdata.opd.web.response.OpdSelectionResponse;
 import cc.kertaskerja.towerdata.pegawai.domain.Pegawai;
 import cc.kertaskerja.towerdata.pegawai.domain.PegawaiService;
 import cc.kertaskerja.towerdata.pegawai.web.response.PegawaiResponse;
+import cc.kertaskerja.towerdata.bidangurusan.domain.BidangUrusanService;
+import cc.kertaskerja.towerdata.bidangurusan.web.OpdBidangUrusanResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,12 @@ import java.util.List;
 public class OpdController {
     private final OpdService opdService;
     private final PegawaiService pegawaiService;
+    private final BidangUrusanService bidangUrusanService;
 
-    public OpdController(OpdService opdService, PegawaiService pegawaiService) {
+    public OpdController(OpdService opdService, PegawaiService pegawaiService, BidangUrusanService bidangUrusanService) {
         this.opdService = opdService;
         this.pegawaiService = pegawaiService;
+        this.bidangUrusanService = bidangUrusanService;
     }
     
     /**
@@ -60,8 +64,6 @@ public class OpdController {
                 ))
                 .toList();
     }
-
-
 
     @GetMapping("detail/penunjang/cari")
     public List<OpdSearchResponse> getPenunjangSearchData(
@@ -113,6 +115,33 @@ public class OpdController {
                         pegawai.opdId(),
                         namaOpd,
                         pegawai.namaRolePegawai()
+                ))
+                .toList();
+    }
+
+    /**
+     * pilih bidang urusan berdasarkan opd
+     * @return list bidang urusan berdasarkan opd
+     */
+    @GetMapping("detail/{opdId}/bidangurusan/pilih")
+    public List<OpdBidangUrusanResponse> getBidangUrusanSelectionByOpd(
+            @PathVariable("opdId") Long opdId,
+            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        // Validate OPD exists
+        opdService.detailOpd(opdId);
+        
+        var bidangUrusanPage = (penunjangFilter != null) 
+                ? bidangUrusanService.getBidangUrusanByOpdIdAndPenunjang(opdId, penunjangFilter, page, size)
+                : bidangUrusanService.getBidangUrusanByOpdId(opdId, page, size);
+
+        return bidangUrusanPage.stream()
+                .map(bidangUrusan -> new OpdBidangUrusanResponse(
+                        bidangUrusan.id(),
+                        bidangUrusan.kodeBidangUrusan(),
+                        bidangUrusan.namaBidangUrusan()
                 ))
                 .toList();
     }

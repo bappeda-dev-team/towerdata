@@ -21,6 +21,9 @@ public record BidangUrusanRequest(
         String kodePemda,
 
         @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang
+        Boolean penunjang,
+
+        @Nullable
+        Long opdId
 ) {
 }
