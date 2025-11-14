@@ -119,33 +119,6 @@ public class OpdController {
                 .toList();
     }
 
-    /**
-     * pilih bidang urusan berdasarkan opd
-     * @return list bidang urusan berdasarkan opd
-     */
-    @GetMapping("detail/{opdId}/bidangurusan/pilih")
-    public List<OpdBidangUrusanResponse> getBidangUrusanSelectionByOpd(
-            @PathVariable("opdId") Long opdId,
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        // Validate OPD exists
-        opdService.detailOpd(opdId);
-        
-        var bidangUrusanPage = (penunjangFilter != null) 
-                ? bidangUrusanService.getBidangUrusanByOpdIdAndPenunjang(opdId, penunjangFilter, page, size)
-                : bidangUrusanService.getBidangUrusanByOpdId(opdId, page, size);
-
-        return bidangUrusanPage.stream()
-                .map(bidangUrusan -> new OpdBidangUrusanResponse(
-                        bidangUrusan.id(),
-                        bidangUrusan.kodeBidangUrusan(),
-                        bidangUrusan.namaBidangUrusan()
-                ))
-                .toList();
-    }
-
     @PutMapping("update/{id}")
     public Opd put(@PathVariable("id") Long id, @Valid @RequestBody OpdRequest request) {
         // Ambil data opd yang sudah dibuat
