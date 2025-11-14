@@ -7,7 +7,7 @@ public record PegawaiSearchResponse(
         String namaPegawai,
         Boolean penunjang,
         @Nullable
-        Long opdId,
+        String kodeOpd,
         String namaRolePegawai
 ) {
 }

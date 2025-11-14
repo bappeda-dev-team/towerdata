@@ -91,28 +91,28 @@ public class OpdController {
         return opdService.findAll()
                 .stream()
                 .map(opd -> new OpdSelectionResponse(
-                        opd.id(),
                         opd.kodeOpd(),
                         opd.namaOpd()
                 ))
                 .toList();
     }
 
-    @GetMapping("detail/{opdId}/pegawai/kode/{kodePegawai}")
+    @GetMapping("detail/{kodeOpd}/pegawai/kode/{kodePegawai}")
     public List<PegawaiResponse> getPegawaiByKodePegawaiInOpd(
-            @PathVariable("opdId") Long opdId,
+            @PathVariable("kodeOpd") String kodeOpd,
             @PathVariable("kodePegawai") String kodePegawai
     ) {
         List<Pegawai> pegawais = pegawaiService.getPegawaiByKodePegawai(kodePegawai);
-        String namaOpd = opdService.detailOpd(opdId).namaOpd();
+        Opd opd = opdService.detailOpdByKodeOpd(kodeOpd);
+        String namaOpd = opd.namaOpd();
 
         return pegawais.stream()
-                .filter(pegawai -> pegawai.opdId().equals(opdId))
+                .filter(pegawai -> pegawai.kodeOpd().equals(opd.kodeOpd()))
                 .map(pegawai -> new PegawaiResponse(
                         pegawai.kodePegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
-                        pegawai.opdId(),
+                        pegawai.kodeOpd(),
                         namaOpd,
                         pegawai.namaRolePegawai()
                 ))

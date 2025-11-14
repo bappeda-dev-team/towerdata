@@ -22,8 +22,8 @@ public record Pegawai(
         @Column("kode_pemda")
         String kodePemda,
 
-        @Column("opd_id")
-        Long opdId,
+        @Column("kode_opd")
+        String kodeOpd,
 
         @Column("penunjang")
         Boolean penunjang,
@@ -41,7 +41,7 @@ public record Pegawai(
             String kodePegawai,
             String namaPegawai,
             String kodePemda,
-            Long opdId,
+            String kodeOpd,
             Boolean penunjang,
             String namaRolePegawai
     ) {
@@ -50,7 +50,7 @@ public record Pegawai(
                 kodePegawai,
                 namaPegawai,
                 kodePemda,
-                opdId,
+                kodeOpd,
                 penunjang,
                 namaRolePegawai,
                 null,

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record PegawaiRequest(
         @Nullable
-        Long opdId,
+        String kodeOpd,
 
         @NotNull(message = "Kode Pegawai tidak boleh kosong")
         @NotEmpty(message = "Kode Pegawai tidak boleh kosong")

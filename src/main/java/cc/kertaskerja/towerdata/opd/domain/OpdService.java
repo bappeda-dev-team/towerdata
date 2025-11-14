@@ -38,6 +38,11 @@ public class OpdService {
                 .toList();
     }
 
+    public Opd detailOpdByKodeOpd(String kodeOpd) {
+        return opdRepository.findByKodeOpd(kodeOpd)
+                .orElseThrow(() -> new OpdNotFoundException(kodeOpd));
+    }
+
     public Opd detailOpd(Long id) {
         return opdRepository.findById(id)
                 .orElseThrow(() -> new OpdNotFoundException(id));

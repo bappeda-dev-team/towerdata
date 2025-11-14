@@ -27,6 +27,11 @@ public interface OpdRepository extends CrudRepository<Opd, Long> {
     @NonNull
     Page<Opd> findAll(@NonNull Pageable pageable);
 
+    boolean existsByKodeOpd(@NonNull String kodeOpd);
+
+    @NonNull
+    Optional<Opd> findByKodeOpd(@NonNull String kodeOpd);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM opd WHERE id = :id")

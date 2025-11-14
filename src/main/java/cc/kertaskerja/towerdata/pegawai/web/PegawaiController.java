@@ -60,7 +60,7 @@ public class PegawaiController {
                         pegawai.kodePegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
-                        pegawai.opdId(),
+                        pegawai.kodeOpd(),
                         pegawai.namaRolePegawai()
                 ))
                 .toList();
@@ -79,7 +79,7 @@ public class PegawaiController {
                         pegawai.kodePegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
-                        pegawai.opdId(),
+                        pegawai.kodeOpd(),
                         pegawai.namaRolePegawai()
                 ))
                 .toList();
@@ -95,7 +95,7 @@ public class PegawaiController {
                 request.kodePegawai(),
                 request.namaPegawai(),
                 request.kodePemda(),
-                request.opdId(),
+                request.kodeOpd(),
                 request.penunjang(),
                 request.namaRolePegawai(),
                 existingPegawai.createdDate(),
@@ -105,13 +105,13 @@ public class PegawaiController {
         return pegawaiService.ubahPegawai(id, pegawai);
     }
 	
-	@PostMapping
+    @PostMapping
     public ResponseEntity<Pegawai> post(@Valid @RequestBody PegawaiRequest request) {
         Pegawai pegawai = Pegawai.of(
                 request.kodePegawai(),
                 request.namaPegawai(),
                 request.kodePemda(),
-                request.opdId(),
+                request.kodeOpd(),
                 request.penunjang(),
                 request.namaRolePegawai()
         );

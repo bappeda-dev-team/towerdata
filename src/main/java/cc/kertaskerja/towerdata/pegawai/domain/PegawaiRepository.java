@@ -29,7 +29,7 @@ public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
     Page<Pegawai> findAll(@NonNull Pageable pageable);
 
     @NonNull
-    Page<Pegawai> findByOpdId(@NonNull Long opdId, @NonNull Pageable pageable);
+    Page<Pegawai> findByKodeOpd(@NonNull String kodeOpd, @NonNull Pageable pageable);
     
     List<Pegawai> findByKodePegawai(String kodePegawai);
 

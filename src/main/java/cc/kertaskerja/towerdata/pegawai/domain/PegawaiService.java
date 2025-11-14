@@ -48,10 +48,10 @@ public class PegawaiService {
     }
 
     public Pegawai tambahPegawai(Pegawai pegawai) {
-        // Validasi OPD jika opdId tidak null
-        if (pegawai.opdId() != null) {
-            if (!opdRepository.existsById(pegawai.opdId())) {
-                throw new OpdNotFoundException(pegawai.opdId());
+        // Validasi OPD jika kodeOpd tidak null
+        if (pegawai.kodeOpd() != null) {
+            if (!opdRepository.existsByKodeOpd(pegawai.kodeOpd())) {
+                throw new OpdNotFoundException(pegawai.kodeOpd());
             }
         }
 
@@ -63,19 +63,19 @@ public class PegawaiService {
             throw new PegawaiNotFoundException(id);
         }
 
-        // Validasi OPD jika opdId tidak null
-        if (pegawai.opdId() != null) {
-            if (!opdRepository.existsById(pegawai.opdId())) {
-                throw new OpdNotFoundException(pegawai.opdId());
+        // Validasi OPD jika kodeOpd tidak null
+        if (pegawai.kodeOpd() != null) {
+            if (!opdRepository.existsByKodeOpd(pegawai.kodeOpd())) {
+                throw new OpdNotFoundException(pegawai.kodeOpd());
             }
         }
 
         return pegawaiRepository.save(pegawai);
     }
 
-    public Page<Pegawai> getPegawaiByOpdId(Long opdId, int page, int size) {
+    public Page<Pegawai> getPegawaiByKodeOpd(String kodeOpd, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return pegawaiRepository.findByOpdId(opdId, pageable);
+        return pegawaiRepository.findByKodeOpd(kodeOpd, pageable);
     }
 
     public void hapusPegawai(Long id) {
