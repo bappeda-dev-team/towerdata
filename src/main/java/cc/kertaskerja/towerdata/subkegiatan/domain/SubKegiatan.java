@@ -13,6 +13,9 @@ public record SubKegiatan(
     @Id
     Long id,
 
+    @Column("kode_opd")
+    String kodeOpd,
+
     @Column("kode_subkegiatan")
     String kodeSubKegiatan,
 
@@ -32,6 +35,7 @@ public record SubKegiatan(
     Instant lastModifiedDate
 ) {
     public static SubKegiatan of (
+            String  kodeOpd,
             String 	kodeSubKegiatan,
             String 	namaSubKegiatan,
             String 	kodePemda,
@@ -39,6 +43,7 @@ public record SubKegiatan(
     ) {
         return new SubKegiatan(
                 null,
+                kodeOpd,
                 kodeSubKegiatan,
                 namaSubKegiatan,
                 kodePemda,

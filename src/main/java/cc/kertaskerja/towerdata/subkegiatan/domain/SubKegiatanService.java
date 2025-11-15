@@ -6,6 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class SubKegiatanService {
     private final SubKegiatanRepository subKegiatanRepository;
@@ -53,6 +56,21 @@ public class SubKegiatanService {
         }
 
         subKegiatanRepository.deleteById(id);
+    }
+
+    public List<SubKegiatan> getSubKegiatanByKodeOpd(List<String> kodeOpdList) {
+        List<SubKegiatan> result = new ArrayList<>();
+        if (kodeOpdList == null) {
+            return result;
+        }
+
+        for (String kodeOpd : kodeOpdList) {
+            if (kodeOpd != null) {
+                result.addAll(subKegiatanRepository.findByKodeOpd(kodeOpd));
+            }
+        }
+
+        return result;
     }
 
 }
