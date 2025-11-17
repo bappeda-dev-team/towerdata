@@ -1,7 +1,7 @@
 package cc.kertaskerja.towerdata.opd.domain.exception;
 
 public class OpdAlreadyExistException extends RuntimeException {
-    public OpdAlreadyExistException(Long id) {
-        super("Opd dengan id " + id + " sudah ada.");
+    public OpdAlreadyExistException(String kodeOpd) {
+        super("Opd dengan kodeOpd " + kodeOpd + " sudah ada.");
     }
 }
