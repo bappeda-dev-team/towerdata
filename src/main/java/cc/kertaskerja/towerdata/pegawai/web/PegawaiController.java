@@ -36,9 +36,9 @@ public class PegawaiController {
 		this.opdService = opdService;
 	}
 	
-	@GetMapping("detail/{id}")
-    public Pegawai getById(@PathVariable("id") Long id) {
-        return pegawaiService.detailPegawai(id);
+	@GetMapping("detail/{nipPegawai}")
+    public Pegawai getByNipPegawai(@PathVariable("nipPegawai") String nipPegawai) {
+        return pegawaiService.detailPegawai(nipPegawai);
     }
 	
 	@GetMapping("detail/cari")
@@ -57,7 +57,7 @@ public class PegawaiController {
 
         return pegawais.stream()
                 .map(pegawai -> new PegawaiSearchResponse(
-                        pegawai.kodePegawai(),
+                        pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
                         pegawai.kodeOpd(),
@@ -76,7 +76,7 @@ public class PegawaiController {
 
         return pegawais.stream()
                 .map(pegawai -> new PegawaiSearchResponse(
-                        pegawai.kodePegawai(),
+                        pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
                         pegawai.kodeOpd(),
@@ -85,16 +85,15 @@ public class PegawaiController {
                 .toList();
     }
 	
-	@PutMapping("update/{id}")
-    public Pegawai put(@PathVariable("id") Long id, @Valid @RequestBody PegawaiRequest request) {
+	@PutMapping("update/{nipPegawai}")
+    public Pegawai put(@PathVariable("nipPegawai") String nipPegawai, @Valid @RequestBody PegawaiRequest request) {
         // Ambil data pegawai yang sudah dibuat
-        Pegawai existingPegawai = pegawaiService.detailPegawai(id);
+        Pegawai existingPegawai = pegawaiService.detailPegawai(nipPegawai);
 
         Pegawai pegawai = new Pegawai(
-                id,
-                request.kodePegawai(),
+                existingPegawai.id(),
+                request.nipPegawai(),
                 request.namaPegawai(),
-                request.kodePemda(),
                 request.kodeOpd(),
                 request.penunjang(),
                 request.namaRolePegawai(),
@@ -102,15 +101,14 @@ public class PegawaiController {
                 null
         );
 
-        return pegawaiService.ubahPegawai(id, pegawai);
+        return pegawaiService.ubahPegawai(nipPegawai, pegawai);
     }
 	
     @PostMapping
     public ResponseEntity<Pegawai> post(@Valid @RequestBody PegawaiRequest request) {
         Pegawai pegawai = Pegawai.of(
-                request.kodePegawai(),
+                request.nipPegawai(),
                 request.namaPegawai(),
-                request.kodePemda(),
                 request.kodeOpd(),
                 request.penunjang(),
                 request.namaRolePegawai()
@@ -125,9 +123,9 @@ public class PegawaiController {
         return ResponseEntity.created(location).body(saved);
     }
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("delete/{nipPegawai}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        pegawaiService.hapusPegawai(id);
+    public void delete(@PathVariable("nipPegawai") String nipPegawai) {
+        pegawaiService.hapusPegawai(nipPegawai);
     }
 }

@@ -1,7 +1,6 @@
 package cc.kertaskerja.towerdata.pegawai.domain;
 
 import cc.kertaskerja.towerdata.pegawai.domain.exception.PegawaiNotFoundException;
-import cc.kertaskerja.towerdata.opd.domain.Opd;
 import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
 
@@ -22,10 +21,10 @@ public class PegawaiService {
         this.opdRepository = opdRepository;
     }
 
-    public Page<Pegawai> cariPegawai(String kodePegawai, String namaPegawai, int page, int size) {
+    public Page<Pegawai> cariPegawai(String nipPegawai, String namaPegawai, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return pegawaiRepository.findByKodePegawaiContainingIgnoreCaseAndNamaPegawaiContainingIgnoreCase(
-                kodePegawai, namaPegawai, pageable
+        return pegawaiRepository.findByNipPegawaiContainingIgnoreCaseAndNamaPegawaiContainingIgnoreCase(
+                nipPegawai, namaPegawai, pageable
         );
     }
 
@@ -38,13 +37,14 @@ public class PegawaiService {
         }
     }
     
-    public List<Pegawai> getPegawaiByKodePegawai(String kodePegawai) {
-        return pegawaiRepository.findByKodePegawai(kodePegawai);
+    public List<Pegawai> getPegawaiByNipPegawai(String nipPegawai) {
+        return pegawaiRepository.findByNipPegawai(nipPegawai);
     }
 
-    public Pegawai detailPegawai(Long id) {
-        return pegawaiRepository.findById(id)
-                .orElseThrow(() -> new PegawaiNotFoundException(id));
+    public Pegawai detailPegawai(String nipPegawai) {
+        return pegawaiRepository.findByNipPegawai(nipPegawai).stream()
+                .findFirst()
+                .orElseThrow(() -> new PegawaiNotFoundException(nipPegawai));
     }
 
     public Pegawai tambahPegawai(Pegawai pegawai) {
@@ -58,9 +58,9 @@ public class PegawaiService {
         return pegawaiRepository.save(pegawai);
     }
 
-    public Pegawai ubahPegawai(Long id, Pegawai pegawai) {
-        if (!pegawaiRepository.existsById(id)) {
-            throw new PegawaiNotFoundException(id);
+    public Pegawai ubahPegawai(String nipPegawai, Pegawai pegawai) {
+        if (!pegawaiRepository.existsByNipPegawai(nipPegawai)) {
+            throw new PegawaiNotFoundException(nipPegawai);
         }
 
         // Validasi OPD jika kodeOpd tidak null
@@ -78,11 +78,11 @@ public class PegawaiService {
         return pegawaiRepository.findByKodeOpd(kodeOpd, pageable);
     }
 
-    public void hapusPegawai(Long id) {
-        if (!pegawaiRepository.existsById(id)) {
-            throw new PegawaiNotFoundException(id);
+    public void hapusPegawai(String nipPegawai) {
+        if (!pegawaiRepository.existsByNipPegawai(nipPegawai)) {
+            throw new PegawaiNotFoundException(nipPegawai);
         }
 
-        pegawaiRepository.deleteById(id);
+        pegawaiRepository.deleteByNipPegawai(nipPegawai);
     }
 }

@@ -3,7 +3,7 @@ package cc.kertaskerja.towerdata.pegawai.web.response;
 import jakarta.annotation.Nullable;
 
 public record PegawaiResponse(
-        String kodePegawai,
+        String nipPegawai,
         String namaPegawai,
         Boolean penunjang,
         @Nullable

@@ -101,19 +101,19 @@ public class OpdController {
      *
      * list data opd pegawai yang memiliki role = admin
      */
-    @GetMapping("detail/{kodeOpd}/pegawai/kode/{kodePegawai}/admin")
-    public List<PegawaiResponse> getPegawaiByKodePegawaiInOpd(
+    @GetMapping("detail/{kodeOpd}/pegawai/kode/{nipPegawai}/admin")
+    public List<PegawaiResponse> getPegawaiByNipPegawaiInOpd(
             @PathVariable("kodeOpd") String kodeOpd,
-            @PathVariable("kodePegawai") String kodePegawai
+            @PathVariable("nipPegawai") String nipPegawai
     ) {
-        List<Pegawai> pegawais = pegawaiService.getPegawaiByKodePegawai(kodePegawai);
+        List<Pegawai> pegawais = pegawaiService.getPegawaiByNipPegawai(nipPegawai);
         Opd opd = opdService.detailOpdByKodeOpd(kodeOpd);
         String namaOpd = opd.namaOpd();
 
         return pegawais.stream()
                 .filter(pegawai -> pegawai.kodeOpd().equals(opd.kodeOpd()))
                 .map(pegawai -> new PegawaiResponse(
-                        pegawai.kodePegawai(),
+                        pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
                         pegawai.penunjang(),
                         pegawai.kodeOpd(),

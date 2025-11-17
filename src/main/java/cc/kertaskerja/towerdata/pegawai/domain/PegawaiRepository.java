@@ -16,8 +16,8 @@ public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
     Optional<Pegawai> findById(@NonNull Long id);
 
     @NonNull
-    Page<Pegawai> findByKodePegawaiContainingIgnoreCaseAndNamaPegawaiContainingIgnoreCase(
-            @NonNull String kodePegawai,
+    Page<Pegawai> findByNipPegawaiContainingIgnoreCaseAndNamaPegawaiContainingIgnoreCase(
+            @NonNull String nipPegawai,
             @NonNull String namaPegawai,
             @NonNull Pageable pageable
     );
@@ -30,12 +30,14 @@ public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
 
     @NonNull
     Page<Pegawai> findByKodeOpd(@NonNull String kodeOpd, @NonNull Pageable pageable);
+
+    boolean existsByNipPegawai(@NonNull String nipPegawai);
     
-    List<Pegawai> findByKodePegawai(String kodePegawai);
+    List<Pegawai> findByNipPegawai(String nipPegawai);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM pegawai WHERE id = :id")
-    void deleteById(@NonNull Long id);
+    @Query("DELETE FROM pegawai WHERE nip_pegawai = :nipPegawai")
+    void deleteByNipPegawai(@NonNull String nipPegawai);
 
 }

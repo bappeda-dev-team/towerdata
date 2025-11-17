@@ -1,0 +1,3 @@
+ALTER TABLE pegawai
+DROP COLUMN IF EXISTS kode_pemda;
+

@@ -13,14 +13,11 @@ public record Pegawai(
         @Id
         Long id,
 
-        @Column("kode_pegawai")
-        String kodePegawai,
+        @Column("nip_pegawai")
+        String nipPegawai,
 
         @Column("nama_pegawai")
         String namaPegawai,
-
-        @Column("kode_pemda")
-        String kodePemda,
 
         @Column("kode_opd")
         String kodeOpd,
@@ -38,18 +35,16 @@ public record Pegawai(
         Instant lastModifiedDate
 ) {
     public static Pegawai of (
-            String kodePegawai,
+            String nipPegawai,
             String namaPegawai,
-            String kodePemda,
             String kodeOpd,
             Boolean penunjang,
             String namaRolePegawai
     ) {
         return new Pegawai (
                 null,
-                kodePegawai,
+                nipPegawai,
                 namaPegawai,
-                kodePemda,
                 kodeOpd,
                 penunjang,
                 namaRolePegawai,
