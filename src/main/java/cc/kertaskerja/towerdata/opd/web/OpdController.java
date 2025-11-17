@@ -97,7 +97,11 @@ public class OpdController {
                 .toList();
     }
 
-    @GetMapping("detail/{kodeOpd}/pegawai/kode/{kodePegawai}")
+    /**
+     *
+     * list data opd pegawai yang memiliki role = admin
+     */
+    @GetMapping("detail/{kodeOpd}/pegawai/kode/{kodePegawai}/admin")
     public List<PegawaiResponse> getPegawaiByKodePegawaiInOpd(
             @PathVariable("kodeOpd") String kodeOpd,
             @PathVariable("kodePegawai") String kodePegawai

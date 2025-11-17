@@ -1,6 +1,8 @@
 package cc.kertaskerja.towerdata.opd.domain;
 
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
+import cc.kertaskerja.towerdata.pemda.domain.PemdaRepository;
+import cc.kertaskerja.towerdata.pemda.domain.exception.PemdaNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +14,11 @@ import java.util.stream.StreamSupport;
 @Service
 public class OpdService {
     private OpdRepository opdRepository;
+    private PemdaRepository pemdaRepository;
 
-    public OpdService(OpdRepository opdRepository) {
+    public OpdService(OpdRepository opdRepository, PemdaRepository pemdaRepository) {
         this.opdRepository = opdRepository;
+        this.pemdaRepository = pemdaRepository;
     }
 
     public Page<Opd> cariOpd(String kodeOpd, String namaOpd, int page, int size) {
@@ -44,12 +48,20 @@ public class OpdService {
     }
 
     public Opd tambahOpd(Opd opd) {
+        if (opd.kodePemda() != null && !pemdaRepository.existsByKodePemda(opd.kodePemda())) {
+            throw new PemdaNotFoundException(opd.kodePemda());
+        }
+
         return opdRepository.save(opd);
     }
 
     public Opd ubahOpd(String kodeOpd, Opd opd) {
         if (!opdRepository.existsByKodeOpd(kodeOpd)) {
             throw new OpdNotFoundException(kodeOpd);
+        }
+
+        if (opd.kodePemda() != null && !pemdaRepository.existsByKodePemda(opd.kodePemda())) {
+            throw new PemdaNotFoundException(opd.kodePemda());
         }
 
         return opdRepository.save(opd);
