@@ -34,6 +34,6 @@ public interface OpdRepository extends CrudRepository<Opd, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM opd WHERE id = :id")
-    void deleteById(@NonNull Long id);
+    @Query("DELETE FROM opd WHERE kode_opd = :kodeOpd")
+    void deleteByKodeOpd(@NonNull String kodeOpd);
 }

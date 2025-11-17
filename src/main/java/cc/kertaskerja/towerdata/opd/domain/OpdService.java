@@ -43,28 +43,23 @@ public class OpdService {
                 .orElseThrow(() -> new OpdNotFoundException(kodeOpd));
     }
 
-    public Opd detailOpd(Long id) {
-        return opdRepository.findById(id)
-                .orElseThrow(() -> new OpdNotFoundException(id));
-    }
-
     public Opd tambahOpd(Opd opd) {
         return opdRepository.save(opd);
     }
 
-    public Opd ubahOpd(Long id, Opd opd) {
-        if (!opdRepository.existsById(id)) {
-            throw new OpdNotFoundException(id);
+    public Opd ubahOpd(String kodeOpd, Opd opd) {
+        if (!opdRepository.existsByKodeOpd(kodeOpd)) {
+            throw new OpdNotFoundException(kodeOpd);
         }
 
         return opdRepository.save(opd);
     }
 
-    public void hapusOpd(Long id) {
-        if (!opdRepository.existsById(id)) {
-            throw new OpdNotFoundException(id);
+    public void hapusOpd(String kodeOpd) {
+        if (!opdRepository.existsByKodeOpd(kodeOpd)) {
+            throw new OpdNotFoundException(kodeOpd);
         }
 
-        opdRepository.deleteById(id);
+        opdRepository.deleteByKodeOpd(kodeOpd);
     }
 }

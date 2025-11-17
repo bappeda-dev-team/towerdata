@@ -34,12 +34,12 @@ public class OpdController {
     
     /**
      * 
-     * @param id
+     * @param kodeOpd
      * @return satu data opd
      */
-    @GetMapping("detail/{id}")
-    public Opd getById(@PathVariable("id") Long id) {
-        return opdService.detailOpd(id);
+    @GetMapping("detail/{kodeOpd}")
+    public Opd getByKodeOpd(@PathVariable("kodeOpd") String kodeOpd) {
+        return opdService.detailOpdByKodeOpd(kodeOpd);
     }
 
     @GetMapping("/detail/cari")
@@ -119,13 +119,12 @@ public class OpdController {
                 .toList();
     }
 
-    @PutMapping("update/{id}")
-    public Opd put(@PathVariable("id") Long id, @Valid @RequestBody OpdRequest request) {
-        // Ambil data opd yang sudah dibuat
-        Opd existingOpd = opdService.detailOpd(id);
+    @PutMapping("update/{kodeOpd}")
+    public Opd put(@PathVariable("kodeOpd") String kodeOpd, @Valid @RequestBody OpdRequest request) {
+        Opd existingOpd = opdService.detailOpdByKodeOpd(kodeOpd);
 
         Opd opd = new Opd(
-                id,
+                existingOpd.id(),
                 request.kodeOpd(),
                 request.namaOpd(),
                 request.kodePemda(),
@@ -134,7 +133,7 @@ public class OpdController {
                 null
         );
 
-        return opdService.ubahOpd(id, opd);
+        return opdService.ubahOpd(kodeOpd, opd);
     }
 
     @PostMapping
@@ -155,9 +154,9 @@ public class OpdController {
         return ResponseEntity.created(location).body(saved);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{kodeOpd}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        opdService.hapusOpd(id);
+    public void delete(@PathVariable("kodeOpd") String kodeOpd) {
+        opdService.hapusOpd(kodeOpd);
     }
 }
