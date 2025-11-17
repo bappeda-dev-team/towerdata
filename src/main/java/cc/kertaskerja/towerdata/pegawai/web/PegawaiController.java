@@ -41,7 +41,7 @@ public class PegawaiController {
         return pegawaiService.detailPegawai(id);
     }
 	
-	@GetMapping("search")
+	@GetMapping("detail/cari")
     public List<PegawaiSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodePegawai,
             @RequestParam(value = "nama", required = false) String namaPegawai,
@@ -66,7 +66,7 @@ public class PegawaiController {
                 .toList();
     }
 	
-	@GetMapping("penunjang/search")
+	@GetMapping("/detail/penunjang/search")
     public List<PegawaiSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,
