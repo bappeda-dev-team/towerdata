@@ -22,12 +22,6 @@ public record Pegawai(
         @Column("kode_opd")
         String kodeOpd,
 
-        @Column("kode_jabatan")
-        String kodeJabatan,
-
-        @Column("nama_jabatan")
-        String namaJabatan,
-
         @CreatedDate
         Instant createdDate,
 
@@ -37,17 +31,13 @@ public record Pegawai(
     public static Pegawai of (
             String nipPegawai,
             String namaPegawai,
-            String kodeOpd,
-            String kodeJabatan,
-            String namaJabatan
+            String kodeOpd
     ) {
         return new Pegawai (
                 null,
                 nipPegawai,
                 namaPegawai,
                 kodeOpd,
-                kodeJabatan,
-                namaJabatan,
                 null,
                 null
         );

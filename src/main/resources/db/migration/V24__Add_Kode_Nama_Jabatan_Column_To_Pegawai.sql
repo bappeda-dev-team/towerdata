@@ -1,6 +1,0 @@
-ALTER TABLE pegawai
-ADD COLUMN IF NOT EXISTS kode_jabatan VARCHAR(255);
-
-ALTER TABLE pegawai
-ADD COLUMN IF NOT EXISTS nama_jabatan VARCHAR(255);
-
