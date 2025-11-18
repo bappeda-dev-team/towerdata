@@ -14,12 +14,6 @@ public record PegawaiRequest(
 
         @NotNull(message = "Nama Pegawai tidak boleh kosong")
         @NotEmpty(message = "Nama Pegawai tidak boleh kosong")
-        String namaPegawai,
-
-        @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang,
-        
-        @NotNull(message = "Nama role tidak boleh kosong")
-        String namaRolePegawai
+        String namaPegawai
 ) {
 }

@@ -115,10 +115,8 @@ public class OpdController {
                 .map(pegawai -> new PegawaiResponse(
                         pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
-                        pegawai.penunjang(),
                         pegawai.kodeOpd(),
-                        namaOpd,
-                        pegawai.namaRolePegawai()
+                        namaOpd
                 ))
                 .toList();
     }

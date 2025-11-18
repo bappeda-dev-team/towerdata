@@ -22,12 +22,6 @@ public record Pegawai(
         @Column("kode_opd")
         String kodeOpd,
 
-        @Column("penunjang")
-        Boolean penunjang,
-
-        @Column("nama_role_pegawai")
-        String namaRolePegawai,
-
         @CreatedDate
         Instant createdDate,
 
@@ -37,17 +31,13 @@ public record Pegawai(
     public static Pegawai of (
             String nipPegawai,
             String namaPegawai,
-            String kodeOpd,
-            Boolean penunjang,
-            String namaRolePegawai
+            String kodeOpd
     ) {
         return new Pegawai (
                 null,
                 nipPegawai,
                 namaPegawai,
                 kodeOpd,
-                penunjang,
-                namaRolePegawai,
                 null,
                 null
         );

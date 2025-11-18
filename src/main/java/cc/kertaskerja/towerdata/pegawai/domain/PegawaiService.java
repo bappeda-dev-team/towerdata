@@ -27,15 +27,6 @@ public class PegawaiService {
                 nipPegawai, namaPegawai, pageable
         );
     }
-
-    public Page<Pegawai> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return pegawaiRepository.findAll(pageable);
-        } else {
-            return pegawaiRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
     
     public List<Pegawai> getPegawaiByNipPegawai(String nipPegawai) {
         return pegawaiRepository.findByNipPegawai(nipPegawai);

@@ -59,28 +59,7 @@ public class PegawaiController {
                 .map(pegawai -> new PegawaiSearchResponse(
                         pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
-                        pegawai.penunjang(),
-                        pegawai.kodeOpd(),
-                        pegawai.namaRolePegawai()
-                ))
-                .toList();
-    }
-	
-	@GetMapping("/detail/penunjang/search")
-    public List<PegawaiSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<Pegawai> pegawais = pegawaiService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return pegawais.stream()
-                .map(pegawai -> new PegawaiSearchResponse(
-                        pegawai.nipPegawai(),
-                        pegawai.namaPegawai(),
-                        pegawai.penunjang(),
-                        pegawai.kodeOpd(),
-                        pegawai.namaRolePegawai()
+                        pegawai.kodeOpd()
                 ))
                 .toList();
     }
@@ -95,8 +74,6 @@ public class PegawaiController {
                 request.nipPegawai(),
                 request.namaPegawai(),
                 request.kodeOpd(),
-                request.penunjang(),
-                request.namaRolePegawai(),
                 existingPegawai.createdDate(),
                 null
         );
@@ -109,9 +86,7 @@ public class PegawaiController {
         Pegawai pegawai = Pegawai.of(
                 request.nipPegawai(),
                 request.namaPegawai(),
-                request.kodeOpd(),
-                request.penunjang(),
-                request.namaRolePegawai()
+                request.kodeOpd()
         );
         Pegawai saved = pegawaiService.tambahPegawai(pegawai);
         URI location = ServletUriComponentsBuilder

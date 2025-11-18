@@ -23,9 +23,6 @@ public interface PegawaiRepository extends CrudRepository<Pegawai, Long> {
     );
 
     @NonNull
-    Page<Pegawai> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
-
-    @NonNull
     Page<Pegawai> findAll(@NonNull Pageable pageable);
 
     @NonNull
