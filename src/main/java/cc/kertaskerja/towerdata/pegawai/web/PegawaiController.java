@@ -74,6 +74,8 @@ public class PegawaiController {
                 request.nipPegawai(),
                 request.namaPegawai(),
                 request.kodeOpd(),
+                request.kodeJabatan(),
+                request.namaJabatan(),
                 existingPegawai.createdDate(),
                 null
         );
@@ -86,7 +88,9 @@ public class PegawaiController {
         Pegawai pegawai = Pegawai.of(
                 request.nipPegawai(),
                 request.namaPegawai(),
-                request.kodeOpd()
+                request.kodeOpd(),
+                request.kodeJabatan(),
+                request.namaJabatan()
         );
         Pegawai saved = pegawaiService.tambahPegawai(pegawai);
         URI location = ServletUriComponentsBuilder
