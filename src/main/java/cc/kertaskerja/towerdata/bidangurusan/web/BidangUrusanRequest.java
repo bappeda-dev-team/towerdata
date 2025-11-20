@@ -14,16 +14,6 @@ public record BidangUrusanRequest(
 
         @NotNull(message = "Nama Bidang Urusan tidak boleh kosong")
         @NotEmpty(message = "Nama Bidang Urusan tidak boleh kosong")
-        String namaBidangUrusan,
-
-        @NotNull(message = "Kode Pemda tidak boleh kosong")
-        @NotEmpty(message = "Kode Pemda tidak boleh kosong")
-        String kodePemda,
-
-        @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang,
-
-        @Nullable
-        Long opdId
+        String namaBidangUrusan
 ) {
 }

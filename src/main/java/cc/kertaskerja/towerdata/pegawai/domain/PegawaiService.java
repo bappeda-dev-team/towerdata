@@ -1,5 +1,7 @@
 package cc.kertaskerja.towerdata.pegawai.domain;
 
+import cc.kertaskerja.towerdata.jabatan.domain.JabatanRepository;
+import cc.kertaskerja.towerdata.jabatan.domain.exception.JabatanNotFoundException;
 import cc.kertaskerja.towerdata.pegawai.domain.exception.PegawaiNotFoundException;
 import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
@@ -15,10 +17,12 @@ import org.springframework.stereotype.Service;
 public class PegawaiService {
     private PegawaiRepository pegawaiRepository;
     private OpdRepository opdRepository;
+    private JabatanRepository jabatanRepository;
 
-    public PegawaiService(PegawaiRepository pegawaiRepository, OpdRepository opdRepository) {
+    public PegawaiService(PegawaiRepository pegawaiRepository, OpdRepository opdRepository, JabatanRepository jabatanRepository) {
         this.pegawaiRepository = pegawaiRepository;
         this.opdRepository = opdRepository;
+        this.jabatanRepository = jabatanRepository;
     }
 
     public Page<Pegawai> cariPegawai(String nipPegawai, String namaPegawai, int page, int size) {
@@ -46,6 +50,12 @@ public class PegawaiService {
             }
         }
 
+        if (pegawai.kodeJabatan() != null) {
+            if (!jabatanRepository.existsByKodeJabatan(pegawai.kodeJabatan())) {
+                throw new JabatanNotFoundException(pegawai.kodeJabatan());
+            }
+        }
+
         return pegawaiRepository.save(pegawai);
     }
 
@@ -58,6 +68,12 @@ public class PegawaiService {
         if (pegawai.kodeOpd() != null) {
             if (!opdRepository.existsByKodeOpd(pegawai.kodeOpd())) {
                 throw new OpdNotFoundException(pegawai.kodeOpd());
+            }
+        }
+
+        if (pegawai.kodeJabatan() != null) {
+            if (!jabatanRepository.existsByKodeJabatan(pegawai.kodeJabatan())) {
+                throw new JabatanNotFoundException(pegawai.kodeJabatan());
             }
         }
 

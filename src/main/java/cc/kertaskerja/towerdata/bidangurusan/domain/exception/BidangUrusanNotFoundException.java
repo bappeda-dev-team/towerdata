@@ -1,7 +1,7 @@
 package cc.kertaskerja.towerdata.bidangurusan.domain.exception;
 
 public class BidangUrusanNotFoundException extends RuntimeException {
-	public BidangUrusanNotFoundException(Long id) {
-		super("Bidang urusan dengan id " + id + " tidak ditemukan.");
+	public BidangUrusanNotFoundException(String kodeBidangUrusan) {
+		super("Bidang urusan dengan kode " + kodeBidangUrusan + " tidak ditemukan.");
 	}
 }

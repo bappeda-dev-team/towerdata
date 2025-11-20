@@ -19,15 +19,6 @@ public record BidangUrusan(
         @Column("nama_bidang_urusan")
         String namaBidangUrusan,
 
-        @Column("kode_pemda")
-        String kodePemda,
-
-        @Column("penunjang")
-        Boolean penunjang,
-
-        @Column("opd_id")
-        Long opdId,
-
         @CreatedDate
         Instant createdDate,
 
@@ -36,18 +27,12 @@ public record BidangUrusan(
 ) {
 	public static BidangUrusan of (
     		String kodeBidangUrusan,
-            String namaBidangUrusan,
-            String kodePemda,
-            Boolean penunjang,
-            Long opdId
+            String namaBidangUrusan
     ) {
         return new BidangUrusan(
                 null,
                 kodeBidangUrusan,
                 namaBidangUrusan,
-                kodePemda,
-                penunjang,
-                opdId,
                 null,
                 null
         );

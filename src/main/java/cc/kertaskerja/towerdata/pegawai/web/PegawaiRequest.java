@@ -8,6 +8,9 @@ public record PegawaiRequest(
         @Nullable
         String kodeOpd,
 
+        @Nullable
+        String kodeJabatan,
+
         @NotNull(message = "NIP Pegawai tidak boleh kosong")
         @NotEmpty(message = "NIP Pegawai tidak boleh kosong")
         String nipPegawai,

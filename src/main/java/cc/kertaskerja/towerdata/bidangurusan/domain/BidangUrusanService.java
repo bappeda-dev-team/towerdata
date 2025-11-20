@@ -6,9 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cc.kertaskerja.towerdata.bidangurusan.domain.exception.BidangUrusanNotFoundException;
-import cc.kertaskerja.towerdata.opd.domain.Opd;
 import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
-import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
 
 @Service
 public class BidangUrusanService {
@@ -27,58 +25,32 @@ public class BidangUrusanService {
         );
     }
 	
-	public Page<BidangUrusan> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return bidangUrusanRepository.findAll(pageable);
-        } else {
-            return bidangUrusanRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
+	public Iterable<BidangUrusan> getAllBidangUrusan() {
+		return bidangUrusanRepository.findAll();
+	}
 	
-	public BidangUrusan detailBidangUrusan(Long id) {
-        return bidangUrusanRepository.findById(id)
-                .orElseThrow(() -> new BidangUrusanNotFoundException(id));
-    }
-
-    public Page<BidangUrusan> getBidangUrusanByOpdId(Long opdId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return bidangUrusanRepository.findByOpdId(opdId, pageable);
-    }
-
-    public Page<BidangUrusan> getBidangUrusanByOpdIdAndPenunjang(Long opdId, Boolean penunjang, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return bidangUrusanRepository.findByOpdIdAndPenunjang(opdId, penunjang, pageable);
+	public BidangUrusan detailBidangUrusan(String kodeBidangUrusan) {
+        return bidangUrusanRepository.findByKodeBidangUrusan(kodeBidangUrusan)
+                .orElseThrow(() -> new BidangUrusanNotFoundException(kodeBidangUrusan));
     }
 	
 	public BidangUrusan tambahBidangUrusan(BidangUrusan bidangUrusan) {
-		if (bidangUrusan.opdId() != null) {
-			if (!opdRepository.existsById(bidangUrusan.opdId())) {
-				throw new OpdNotFoundException(bidangUrusan.opdId());
-			}
-		}
         return bidangUrusanRepository.save(bidangUrusan);
     }
 
-    public BidangUrusan ubahBidangUrusan(Long id, BidangUrusan bidangUrusan) {
-        if (!bidangUrusanRepository.existsById(id)) {
-            throw new BidangUrusanNotFoundException(id);
+    public BidangUrusan ubahBidangUrusan(String kodeBidangUrusan, BidangUrusan bidangUrusan) {
+        if (!bidangUrusanRepository.existsByKodeBidangUrusan(kodeBidangUrusan)) {
+            throw new BidangUrusanNotFoundException(kodeBidangUrusan);
         }
-
-        if (bidangUrusan.opdId() != null) {
-			if (!opdRepository.existsById(bidangUrusan.opdId())) {
-				throw new OpdNotFoundException(bidangUrusan.opdId());
-			}
-		}
 
         return bidangUrusanRepository.save(bidangUrusan);
     }
 
-	public void hapusBidangUrusan(Long id) {
-        if (!bidangUrusanRepository.existsById(id)) {
-            throw new BidangUrusanNotFoundException(id);
+	public void hapusBidangUrusan(String kodeBidangUrusan) {
+        if (!bidangUrusanRepository.existsByKodeBidangUrusan(kodeBidangUrusan)) {
+            throw new BidangUrusanNotFoundException(kodeBidangUrusan);
         }
 
-        bidangUrusanRepository.deleteById(id);
+        bidangUrusanRepository.deleteByKodeBidangUrusan(kodeBidangUrusan);
     }
 }

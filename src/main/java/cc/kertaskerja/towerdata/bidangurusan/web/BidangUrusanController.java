@@ -31,10 +31,15 @@ public class BidangUrusanController {
 		this.bidangUrusanService = bidangUrusanService;
 	}
 	
-	@GetMapping("detail/{id}")
-    public BidangUrusan getById(@PathVariable("id") Long id) {
-        return bidangUrusanService.detailBidangUrusan(id);
+	@GetMapping("detail/{kodeBidangUrusan}")
+    public BidangUrusan getByKodeBidangUrusan(@PathVariable("kodeBidangUrusan") String kodeBidangUrusan) {
+        return bidangUrusanService.detailBidangUrusan(kodeBidangUrusan);
     }
+	
+	@GetMapping("detail/findall")
+	public Iterable<BidangUrusan> getAll() {
+		return bidangUrusanService.getAllBidangUrusan();
+	}
 	
 	@GetMapping("cari")
     public List<BidangUrusanSearchResponse> search(
@@ -53,72 +58,46 @@ public class BidangUrusanController {
         return bidangurusans.stream()
                 .map(bidangurusan -> new BidangUrusanSearchResponse(
                         bidangurusan.kodeBidangUrusan(),
-                        bidangurusan.namaBidangUrusan(),
-                        bidangurusan.penunjang(),
-                        bidangurusan.opdId()
+                        bidangurusan.namaBidangUrusan()
                 ))
                 .toList();
-    }
+	}
 	
-	@GetMapping("penunjang/cari")
-    public List<BidangUrusanSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<BidangUrusan> bidangUrusans = bidangUrusanService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return bidangUrusans.stream()
-                .map(bidangurusan -> new BidangUrusanSearchResponse(
-                        bidangurusan.kodeBidangUrusan(),
-                        bidangurusan.namaBidangUrusan(),
-                        bidangurusan.penunjang(),
-                        bidangurusan.opdId()
-                ))
-                .toList();
-    }
-	
-	@PutMapping("update/{id}")
-    public BidangUrusan put(@PathVariable("id") Long id, @Valid @RequestBody BidangUrusanRequest request) {
+	@PutMapping("update/{kodeBidangUrusan}")
+    public BidangUrusan put(@PathVariable("kodeBidangUrusan") String kodeBidangUrusan, @Valid @RequestBody BidangUrusanRequest request) {
         // Ambil data bidang urusan yang sudah dibuat
-        BidangUrusan existingBidangUrusan = bidangUrusanService.detailBidangUrusan(id);
+        BidangUrusan existingBidangUrusan = bidangUrusanService.detailBidangUrusan(kodeBidangUrusan);
 
         BidangUrusan bidangUrusan = new BidangUrusan(
-                id,
+                existingBidangUrusan.id(),
                 request.kodeBidangUrusan(),
                 request.namaBidangUrusan(),
-                request.kodePemda(),
-                request.penunjang(),
-                request.opdId(),
                 existingBidangUrusan.createdDate(),
                 null
         );
 
-        return bidangUrusanService.ubahBidangUrusan(id, bidangUrusan);
+        return bidangUrusanService.ubahBidangUrusan(kodeBidangUrusan, bidangUrusan);
     }
 	
 	@PostMapping
     public ResponseEntity<BidangUrusan> post(@Valid @RequestBody BidangUrusanRequest request) {
         BidangUrusan bidangUrusan = BidangUrusan.of(
                 request.kodeBidangUrusan(),
-                request.namaBidangUrusan(),
-                request.kodePemda(),
-                request.penunjang(),
-                request.opdId()
+                request.namaBidangUrusan()
         );
         BidangUrusan saved = bidangUrusanService.tambahBidangUrusan(bidangUrusan);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(saved.id())
+                .path("/{kodeBidangUrusan}")
+                .buildAndExpand(saved.kodeBidangUrusan())
                 .toUri();
 
         return ResponseEntity.created(location).body(saved);
     }
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("delete/{kodeBidangUrusan}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        bidangUrusanService.hapusBidangUrusan(id);
+    public void delete(@PathVariable("kodeBidangUrusan") String kodeBidangUrusan) {
+        bidangUrusanService.hapusBidangUrusan(kodeBidangUrusan);
     }
 }

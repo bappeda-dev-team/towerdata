@@ -97,30 +97,6 @@ public class OpdController {
                 .toList();
     }
 
-    /**
-     *
-     * list data opd pegawai yang memiliki role = admin
-     */
-    @GetMapping("detail/{kodeOpd}/pegawai/kode/{nipPegawai}/admin")
-    public List<PegawaiResponse> getPegawaiByNipPegawaiInOpd(
-            @PathVariable("kodeOpd") String kodeOpd,
-            @PathVariable("nipPegawai") String nipPegawai
-    ) {
-        List<Pegawai> pegawais = pegawaiService.getPegawaiByNipPegawai(nipPegawai);
-        Opd opd = opdService.detailOpdByKodeOpd(kodeOpd);
-        String namaOpd = opd.namaOpd();
-
-        return pegawais.stream()
-                .filter(pegawai -> pegawai.kodeOpd().equals(opd.kodeOpd()))
-                .map(pegawai -> new PegawaiResponse(
-                        pegawai.nipPegawai(),
-                        pegawai.namaPegawai(),
-                        pegawai.kodeOpd(),
-                        namaOpd
-                ))
-                .toList();
-    }
-
     @PutMapping("update/{kodeOpd}")
     public Opd put(@PathVariable("kodeOpd") String kodeOpd, @Valid @RequestBody OpdRequest request) {
         Opd existingOpd = opdService.detailOpdByKodeOpd(kodeOpd);

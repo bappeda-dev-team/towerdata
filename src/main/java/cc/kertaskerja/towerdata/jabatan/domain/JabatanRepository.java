@@ -27,6 +27,8 @@ public interface JabatanRepository extends CrudRepository<Jabatan, Long> {
     @NonNull
     Page<Jabatan> findAll(@NonNull Pageable pageable);
 
+    boolean existsByKodeJabatan(@NonNull String kodeJabatan);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM jabatan WHERE id = :id")
