@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +23,6 @@ public interface OpdRepository extends CrudRepository<Opd, Long> {
     );
 
     @NonNull
-    Page<Opd> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
-
-    @NonNull
     Page<Opd> findAll(@NonNull Pageable pageable);
 
     boolean existsByKodeOpd(@NonNull String kodeOpd);
@@ -35,5 +33,5 @@ public interface OpdRepository extends CrudRepository<Opd, Long> {
     @Modifying
     @Transactional
     @Query("DELETE FROM opd WHERE kode_opd = :kodeOpd")
-    void deleteByKodeOpd(@NonNull String kodeOpd);
+    void deleteByKodeOpd(@NonNull @Param("kodeOpd") String kodeOpd);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -31,6 +32,6 @@ public interface PemdaRepository extends CrudRepository<Pemda, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM pemda WHERE id = :id")
-    void deleteByKodePemda(@NonNull String kodePemda);
+    @Query("DELETE FROM pemda WHERE kode_pemda = :kodePemda")
+    void deleteByKodePemda(@NonNull @Param("kodePemda") String kodePemda);
 }

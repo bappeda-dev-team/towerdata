@@ -20,7 +20,7 @@ public record OpdRequest(
         @NotEmpty(message = "Kode Pemda tidak boleh kosong")
         String kodePemda,
 
-        @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang
+        @NotNull(message = "Sub Opd tidak boleh kosong")
+        Boolean subOpd
 ) {
 }

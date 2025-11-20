@@ -4,11 +4,8 @@ import cc.kertaskerja.towerdata.opd.domain.Opd;
 import cc.kertaskerja.towerdata.opd.domain.OpdService;
 import cc.kertaskerja.towerdata.opd.web.response.OpdSearchResponse;
 import cc.kertaskerja.towerdata.opd.web.response.OpdSelectionResponse;
-import cc.kertaskerja.towerdata.pegawai.domain.Pegawai;
 import cc.kertaskerja.towerdata.pegawai.domain.PegawaiService;
-import cc.kertaskerja.towerdata.pegawai.web.response.PegawaiResponse;
 import cc.kertaskerja.towerdata.bidangurusan.domain.BidangUrusanService;
-import cc.kertaskerja.towerdata.bidangurusan.web.OpdBidangUrusanResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -60,33 +57,16 @@ public class OpdController {
                 .map(opd -> new OpdSearchResponse(
                         opd.kodeOpd(),
                         opd.namaOpd(),
-                        opd.penunjang()
-                ))
-                .toList();
-    }
-
-    @GetMapping("detail/penunjang/cari")
-    public List<OpdSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<Opd> opds = opdService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return opds.stream()
-                .map(opd -> new OpdSearchResponse(
-                        opd.kodeOpd(),
-                        opd.namaOpd(),
-                        opd.penunjang()
+                        opd.subOpd()
                 ))
                 .toList();
     }
 
     /**
-     * pilih opd dropdown
+     * pilih all opd
      * @return list semua data opd
      */
-    @GetMapping("detail/pilihOpd")
+    @GetMapping("detail/findall")
     public List<OpdSelectionResponse> getOpdSelection() {
         return opdService.findAll()
                 .stream()
@@ -106,7 +86,7 @@ public class OpdController {
                 request.kodeOpd(),
                 request.namaOpd(),
                 request.kodePemda(),
-                request.penunjang(),
+                request.subOpd(),
                 existingOpd.createdDate(),
                 null
         );
@@ -120,7 +100,7 @@ public class OpdController {
                 request.kodeOpd(),
                 request.namaOpd(),
                 request.kodePemda(),
-                request.penunjang()
+                request.subOpd()
         );
         Opd saved = opdService.tambahOpd(opd);
         URI location = ServletUriComponentsBuilder

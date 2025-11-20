@@ -28,15 +28,6 @@ public class OpdService {
         );
     }
 
-    public Page<Opd> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return opdRepository.findAll(pageable);
-        } else {
-            return opdRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
-
     public List<Opd> findAll() {
         return StreamSupport.stream(opdRepository.findAll().spliterator(), false)
                 .toList();
