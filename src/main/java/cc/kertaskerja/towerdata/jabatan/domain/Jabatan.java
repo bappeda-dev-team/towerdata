@@ -19,11 +19,8 @@ public record Jabatan(
         @Column("nama_jabatan")
         String namaJabatan,
 
-        @Column("kode_pemda")
-        String kodePemda,
-
-        @Column("penunjang")
-        Boolean penunjang,
+        @Column("struktural")
+        Boolean struktural,
 
         @CreatedDate
         Instant createdDate,
@@ -32,17 +29,15 @@ public record Jabatan(
         Instant lastModifiedDate
 ) {
     public static Jabatan of (
-    		String kodeJabatan,
+            String kodeJabatan,
             String namaJabatan,
-            String kodePemda,
-            Boolean penunjang
+            Boolean struktural
     ) {
         return new Jabatan(
                 null,
                 kodeJabatan,
                 namaJabatan,
-                kodePemda,
-                penunjang,
+                struktural,
                 null,
                 null
         );

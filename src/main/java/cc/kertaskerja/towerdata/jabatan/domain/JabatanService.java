@@ -1,5 +1,7 @@
 package cc.kertaskerja.towerdata.jabatan.domain;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,37 +24,32 @@ public class JabatanService {
         );
     }
 
-    public Page<Jabatan> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return jabatanRepository.findAll(pageable);
-        } else {
-            return jabatanRepository.findByPenunjang(penunjangFilter, pageable);
-        }
+    public Jabatan detailJabatan(String kodeJabatan) {
+        return jabatanRepository.findByKodeJabatan(kodeJabatan)
+                .orElseThrow(() -> new JabatanNotFoundException(kodeJabatan));
     }
 
-    public Jabatan detailJabatan(Long id) {
-        return jabatanRepository.findById(id)
-                .orElseThrow(() -> new JabatanNotFoundException(id));
+    public List<Jabatan> semuaJabatan() {
+        return jabatanRepository.findAll(Pageable.unpaged()).getContent();
     }
 
     public Jabatan tambahJabatan(Jabatan jabatan) {
         return jabatanRepository.save(jabatan);
     }
 
-    public Jabatan ubahJabatan(Long id, Jabatan jabatan) {
-        if (!jabatanRepository.existsById(id)) {
-            throw new JabatanNotFoundException(id);
+    public Jabatan ubahJabatan(String kodeJabatan, Jabatan jabatan) {
+        if (!jabatanRepository.existsByKodeJabatan(kodeJabatan)) {
+            throw new JabatanNotFoundException(kodeJabatan);
         }
 
         return jabatanRepository.save(jabatan);
     }
 
-    public void hapusJabatan(Long id) {
-        if (!jabatanRepository.existsById(id)) {
-            throw new JabatanNotFoundException(id);
+    public void hapusJabatan(String kodeJabatan) {
+        if (!jabatanRepository.existsByKodeJabatan(kodeJabatan)) {
+            throw new JabatanNotFoundException(kodeJabatan);
         }
 
-        jabatanRepository.deleteById(id);
+        jabatanRepository.deleteByKodeJabatan(kodeJabatan);
     }
 }

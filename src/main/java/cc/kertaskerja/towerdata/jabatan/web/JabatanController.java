@@ -31,12 +31,22 @@ public class JabatanController {
         this.jabatanService = jabatanService;
     }
 
-    @GetMapping("detail/{id}")
-    public Jabatan getById(@PathVariable("id") Long id) {
-        return jabatanService.detailJabatan(id);
+    @GetMapping("detail/{kodeJabatan}")
+    public Jabatan getByKode(@PathVariable("kodeJabatan") String kodeJabatan) {
+        return jabatanService.detailJabatan(kodeJabatan);
     }
 
-    @GetMapping("search")
+    @GetMapping("detail/findall")
+    public List<JabatanSearchResponse> getAll() {
+        return jabatanService.semuaJabatan().stream()
+                .map(jabatan -> new JabatanSearchResponse(
+                        jabatan.kodeJabatan(),
+                        jabatan.namaJabatan(),
+                        jabatan.struktural()))
+                .toList();
+    }
+
+    @GetMapping("detail/cari")
     public List<JabatanSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeJabatan,
             @RequestParam(value = "nama", required = false) String namaJabatan,
@@ -52,43 +62,25 @@ public class JabatanController {
                 .map(jabatan -> new JabatanSearchResponse(
                         jabatan.kodeJabatan(),
                         jabatan.namaJabatan(),
-                        jabatan.penunjang()))
+                        jabatan.struktural()))
                 .toList();
     }
 
-    @GetMapping("penunjang/search")
-    public List<JabatanSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<Jabatan> jabatans = jabatanService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return jabatans.stream()
-                .map(jabatan -> new JabatanSearchResponse(
-                        jabatan.kodeJabatan(),
-                        jabatan.namaJabatan(),
-                        jabatan.penunjang()
-                ))
-                .toList();
-    }
-
-    @PutMapping("update/{id}")
-    public Jabatan put(@PathVariable("id") Long id, @Valid @RequestBody JabatanRequest request) {
+    @PutMapping("update/{kodeJabatan}")
+    public Jabatan put(@PathVariable("kodeJabatan") String kodeJabatan, @Valid @RequestBody JabatanRequest request) {
         // Ambil data jabatan yang sudah dibuat
-        Jabatan existingJabatan = jabatanService.detailJabatan(id);
+        Jabatan existingJabatan = jabatanService.detailJabatan(kodeJabatan);
 
         Jabatan jabatan = new Jabatan(
-                id,
+                existingJabatan.id(),
                 request.kodeJabatan(),
                 request.namaJabatan(),
-                request.kodeJabatan(),
-                request.penunjang(),
+                request.struktural(),
                 existingJabatan.createdDate(),
                 null
         );
 
-        return jabatanService.ubahJabatan(id, jabatan);
+        return jabatanService.ubahJabatan(kodeJabatan, jabatan);
     }
 
     @PostMapping
@@ -96,22 +88,21 @@ public class JabatanController {
         Jabatan jabatan = Jabatan.of(
                 request.kodeJabatan(),
                 request.namaJabatan(),
-                request.kodePemda(),
-                request.penunjang()
+                request.struktural()
         );
         Jabatan saved = jabatanService.tambahJabatan(jabatan);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(saved.id())
+                .path("/{kode}")
+                .buildAndExpand(saved.kodeJabatan())
                 .toUri();
 
         return ResponseEntity.created(location).body(saved);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{kodeJabatan}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        jabatanService.hapusJabatan(id);
+    public void delete(@PathVariable("kodeJabatan") String kodeJabatan) {
+        jabatanService.hapusJabatan(kodeJabatan);
     }
 }

@@ -16,11 +16,7 @@ public record JabatanRequest(
         @NotEmpty(message = "Nama Jabatan tidak boleh kosong")
         String namaJabatan,
 
-        @NotNull(message = "Kode Pemda tidak boleh kosong")
-        @NotEmpty(message = "Kode Pemda tidak boleh kosong")
-        String kodePemda,
-
-        @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang
+        @NotNull(message = "Struktural tidak boleh kosong")
+        Boolean struktural
 ) {
 }
