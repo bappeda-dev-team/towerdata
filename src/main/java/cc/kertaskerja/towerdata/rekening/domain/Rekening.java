@@ -19,11 +19,8 @@ public record Rekening(
 		@Column("nama_rekening")
 		String namaRekening,
 
-		@Column("kode_pemda")
-		String kodePemda,
-
-		@Column("penunjang")
-		Boolean penunjang,
+		@Column("aktif")
+		Boolean aktif,
 
 		@CreatedDate
 		Instant createdDate,
@@ -34,15 +31,13 @@ public record Rekening(
 	public static Rekening of (
 			String kodeRekening,
 			String namaRekening,
-			String kodePemda,
-			Boolean penunjang
+			Boolean aktif
 	) {
 		return new Rekening(
 				null,
 				kodeRekening,
 				namaRekening,
-				kodePemda,
-				penunjang,
+				aktif,
 				null,
 				null
 		);

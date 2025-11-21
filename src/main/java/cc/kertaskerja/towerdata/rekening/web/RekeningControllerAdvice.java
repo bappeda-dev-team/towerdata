@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.rekening.web;
 
-import cc.kertaskerja.towerdata.program.domain.exception.ProgramNotFoundException;
 import cc.kertaskerja.towerdata.rekening.domain.exception.RekeningAlreadyExistException;
 import cc.kertaskerja.towerdata.rekening.domain.exception.RekeningNotFoundException;
 import org.springframework.http.HttpStatus;

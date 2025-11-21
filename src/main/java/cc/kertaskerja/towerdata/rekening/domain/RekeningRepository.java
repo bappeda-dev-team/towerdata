@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ public interface RekeningRepository extends CrudRepository<Rekening, Long> {
     Optional<Rekening> findById(@NonNull Long id);
 
     @NonNull
+    Optional<Rekening> findByKodeRekening(@NonNull String kodeRekening);
+
+    @NonNull
     Page<Rekening> findByKodeRekeningContainingIgnoreCaseAndNamaRekeningContainingIgnoreCase(
             @NonNull String kodeRekening,
             @NonNull String namaRekening,
@@ -22,13 +26,12 @@ public interface RekeningRepository extends CrudRepository<Rekening, Long> {
     );
 
     @NonNull
-    Page<Rekening> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
-
-    @NonNull
     Page<Rekening> findAll(@NonNull Pageable pageable);
+
+    boolean existsByKodeRekening(@NonNull String kodeRekening);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM rekening WHERE id = :id")
-    void deleteById(@NonNull Long id);
+    @Query("DELETE FROM rekening WHERE kode_rekening = :kodeRekening")
+    void deleteByKodeRekening(@NonNull @Param("kodeRekening") String kodeRekening);
 }

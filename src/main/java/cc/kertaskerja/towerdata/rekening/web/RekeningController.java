@@ -31,12 +31,17 @@ public class RekeningController {
         this.rekeningService = rekeningService;
     }
 
-    @GetMapping("detail/{id}")
-    public Rekening getById(@PathVariable("id") Long id) {
-        return rekeningService.detailRekening(id);
+    @GetMapping("detail/{kodeRekening}")
+    public Rekening getByKodeRekening(@PathVariable("kodeRekening") String kodeRekening) {
+        return rekeningService.detailRekening(kodeRekening);
     }
 
-    @GetMapping("search")
+    @GetMapping("detail/findall")
+    public List<Rekening> getAll() {
+        return rekeningService.semuaRekening();
+    }
+
+    @GetMapping("detail/cari")
     public List<RekeningSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeRekening,
             @RequestParam(value = "nama", required = false) String namaRekening,
@@ -54,44 +59,26 @@ public class RekeningController {
                 .map(rekening -> new RekeningSearchResponse(
                         rekening.kodeRekening(),
                         rekening.namaRekening(),
-                        rekening.penunjang()
+                        rekening.aktif()
                 ))
                 .toList();
     }
 
-    @GetMapping("penunjang/search")
-    public List<RekeningSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<Rekening> rekenings = rekeningService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return rekenings.stream()
-                .map(rekening -> new RekeningSearchResponse(
-                        rekening.kodeRekening(),
-                        rekening.namaRekening(),
-                        rekening.penunjang()
-                ))
-                .toList();
-    }
-
-    @PutMapping("update/{id}")
-    public Rekening put(@PathVariable("id") Long id, @Valid @RequestBody RekeningRequest request) {
+    @PutMapping("update/{kodeRekening}")
+    public Rekening put(@PathVariable("kodeRekening") String kodeRekening, @Valid @RequestBody RekeningRequest request) {
         // Ambil data Rekening yang sudah dibuat
-        Rekening existingRekening = rekeningService.detailRekening(id);
+        Rekening existingRekening = rekeningService.detailRekening(kodeRekening);
 
         Rekening rekening = new Rekening(
-                id,
+                existingRekening.id(),
                 request.kodeRekening(),
                 request.namaRekening(),
-                request.kodePemda(),
-                request.penunjang(),
+                request.aktif(),
                 existingRekening.createdDate(),
                 null
         );
 
-        return rekeningService.ubahRekening(id, rekening);
+        return rekeningService.ubahRekening(kodeRekening, rekening);
     }
 
     @PostMapping
@@ -99,22 +86,21 @@ public class RekeningController {
         Rekening rekening = Rekening.of(
                 request.kodeRekening(),
                 request.namaRekening(),
-                request.kodePemda(),
-                request.penunjang()
+                request.aktif()
         );
         Rekening saved = rekeningService.tambahRekening(rekening);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(saved.id())
+                .path("/{kodeRekening}")
+                .buildAndExpand(saved.kodeRekening())
                 .toUri();
 
         return ResponseEntity.created(location).body(saved);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{kodeRekening}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        rekeningService.hapusRekening(id);
+    public void delete(@PathVariable("kodeRekening") String kodeRekening) {
+        rekeningService.hapusRekening(kodeRekening);
     }
 }

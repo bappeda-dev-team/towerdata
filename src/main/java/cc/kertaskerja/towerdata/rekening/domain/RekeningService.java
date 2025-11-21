@@ -1,5 +1,8 @@
 package cc.kertaskerja.towerdata.rekening.domain;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,37 +25,39 @@ public class RekeningService {
         );
     }
 
-    public Page<Rekening> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return rekeningRepository.findAll(pageable);
-        } else {
-            return rekeningRepository.findByPenunjang(penunjangFilter, pageable);
-        }
+    public Rekening detailRekening(String kodeRekening) {
+        return rekeningRepository.findByKodeRekening(kodeRekening)
+                .orElseThrow(() -> new RekeningNotFoundException(kodeRekening));
     }
 
-    public Rekening detailRekening(Long id) {
-        return rekeningRepository.findById(id)
-                .orElseThrow(() -> new RekeningNotFoundException(id));
+    public List<Rekening> semuaRekening() {
+        return StreamSupport.stream(rekeningRepository.findAll().spliterator(), false)
+                .toList();
     }
 
     public Rekening tambahRekening(Rekening rekening) {
         return rekeningRepository.save(rekening);
     }
 
-    public Rekening ubahRekening(Long id, Rekening rekening) {
-        if (!rekeningRepository.existsById(id)) {
-            throw new RekeningNotFoundException(id);
-        }
+    public Rekening ubahRekening(String kodeRekening, Rekening rekening) {
+        Rekening existingRekening = detailRekening(kodeRekening);
+        Rekening rekeningToSave = new Rekening(
+                existingRekening.id(),
+                rekening.kodeRekening(),
+                rekening.namaRekening(),
+                rekening.aktif(),
+                existingRekening.createdDate(),
+                null
+        );
 
-        return rekeningRepository.save(rekening);
+        return rekeningRepository.save(rekeningToSave);
     }
 
-    public void hapusRekening(Long id) {
-        if (!rekeningRepository.existsById(id)) {
-            throw new RekeningNotFoundException(id);
+    public void hapusRekening(String kodeRekening) {
+        if (!rekeningRepository.existsByKodeRekening(kodeRekening)) {
+            throw new RekeningNotFoundException(kodeRekening);
         }
 
-        rekeningRepository.deleteById(id);
+        rekeningRepository.deleteByKodeRekening(kodeRekening);
     }
 }

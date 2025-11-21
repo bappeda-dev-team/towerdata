@@ -16,11 +16,7 @@ public record RekeningRequest(
         @NotEmpty(message = "Nama Rekening tidak boleh kosong")
         String namaRekening,
 
-        @NotNull(message = "Kode Pemda tidak boleh kosong")
-        @NotEmpty(message = "Kode Pemda tidak boleh kosong")
-        String kodePemda,
-
-        @NotNull(message = "Penunjang tidak boleh kosong")
-        Boolean penunjang
+        @NotNull(message = "Aktif tidak boleh kosong")
+        Boolean aktif
 ) {
 }
