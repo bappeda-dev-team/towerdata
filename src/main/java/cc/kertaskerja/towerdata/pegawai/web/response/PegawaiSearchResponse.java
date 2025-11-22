@@ -6,6 +6,8 @@ public record PegawaiSearchResponse(
         String nipPegawai,
         String namaPegawai,
         @Nullable
-        String kodeOpd
+        String kodeOpd,
+        boolean aktif,
+        boolean khusus
 ) {
 }

@@ -7,6 +7,7 @@ import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,11 @@ public class PegawaiService {
         return pegawaiRepository.findByNipPegawai(nipPegawai).stream()
                 .findFirst()
                 .orElseThrow(() -> new PegawaiNotFoundException(nipPegawai));
+    }
+    
+    public List<Pegawai> findAll() {
+        return StreamSupport.stream(pegawaiRepository.findAll().spliterator(), false)
+                .toList();
     }
 
     public Pegawai tambahPegawai(Pegawai pegawai) {

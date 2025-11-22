@@ -25,6 +25,12 @@ public record Pegawai(
         @Column("kode_jabatan")
         String kodeJabatan,
 
+        @Column("aktif")
+        boolean aktif,
+
+        @Column("khusus")
+        boolean khusus,
+
         @CreatedDate
         Instant createdDate,
 
@@ -35,7 +41,9 @@ public record Pegawai(
             String nipPegawai,
             String namaPegawai,
             String kodeOpd,
-            String kodeJabatan
+            String kodeJabatan,
+            boolean aktif,
+            boolean khusus
     ) {
         return new Pegawai (
                 null,
@@ -43,6 +51,8 @@ public record Pegawai(
                 namaPegawai,
                 kodeOpd,
                 kodeJabatan,
+                aktif,
+                khusus,
                 null,
                 null
         );

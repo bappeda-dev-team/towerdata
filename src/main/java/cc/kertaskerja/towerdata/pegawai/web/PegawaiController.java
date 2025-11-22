@@ -41,6 +41,20 @@ public class PegawaiController {
         return pegawaiService.detailPegawai(nipPegawai);
     }
 	
+	@GetMapping("detail/findall")
+    public List<PegawaiResponse> findAll() {
+        return pegawaiService.findAll()
+                .stream()
+                .map(pegawai -> new PegawaiResponse(
+                        pegawai.nipPegawai(),
+                        pegawai.namaPegawai(),
+                        pegawai.kodeOpd(),
+                        pegawai.aktif(),
+                        pegawai.khusus()
+                ))
+                .toList();
+    }
+	
 	@GetMapping("detail/cari")
     public List<PegawaiSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodePegawai,
@@ -59,7 +73,9 @@ public class PegawaiController {
                 .map(pegawai -> new PegawaiSearchResponse(
                         pegawai.nipPegawai(),
                         pegawai.namaPegawai(),
-                        pegawai.kodeOpd()
+                        pegawai.kodeOpd(),
+                        pegawai.aktif(),
+                        pegawai.khusus()
                 ))
                 .toList();
     }
@@ -75,6 +91,8 @@ public class PegawaiController {
                 request.namaPegawai(),
                 request.kodeOpd(),
                 request.kodeJabatan(),
+                request.aktif() != null ? request.aktif() : existingPegawai.aktif(),
+                request.khusus() != null ? request.khusus() : existingPegawai.khusus(),
                 existingPegawai.createdDate(),
                 null
         );
@@ -88,7 +106,9 @@ public class PegawaiController {
                 request.nipPegawai(),
                 request.namaPegawai(),
                 request.kodeOpd(),
-                request.kodeJabatan()
+                request.kodeJabatan(),
+                request.aktif() != null ? request.aktif() : false,
+                request.khusus() != null ? request.khusus() : false
         );
         Pegawai saved = pegawaiService.tambahPegawai(pegawai);
         URI location = ServletUriComponentsBuilder

@@ -17,6 +17,12 @@ public record PegawaiRequest(
 
         @NotNull(message = "Nama Pegawai tidak boleh kosong")
         @NotEmpty(message = "Nama Pegawai tidak boleh kosong")
-        String namaPegawai
+        String namaPegawai,
+
+        @Nullable
+        Boolean aktif,
+
+        @Nullable
+        Boolean khusus
 ) {
 }

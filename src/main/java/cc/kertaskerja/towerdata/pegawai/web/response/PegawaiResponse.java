@@ -7,7 +7,7 @@ public record PegawaiResponse(
         String namaPegawai,
         @Nullable
         String kodeOpd,
-        @Nullable
-        String namaOpd
+        boolean aktif,
+        boolean khusus
 ) {
 }
