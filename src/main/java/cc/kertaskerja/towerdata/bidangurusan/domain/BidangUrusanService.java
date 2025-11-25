@@ -4,29 +4,21 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import cc.kertaskerja.towerdata.bidangurusan.domain.exception.BidangUrusanNotFoundException;
 import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
-import cc.kertaskerja.towerdata.bidangurusan.web.BidangUrusanSearchResponse;
-
-import java.time.Duration;
-import java.util.List;
 
 @Service
 public class BidangUrusanService {
 	private final BidangUrusanRepository bidangUrusanRepository;
 	private final OpdRepository opdRepository;
-    private final WebClient towerdataClient;
 	
 	public BidangUrusanService(
             BidangUrusanRepository bidangUrusanRepository,
-            OpdRepository opdRepository,
-            WebClient towerdataClient
+            OpdRepository opdRepository
     ) {
 		this.bidangUrusanRepository = bidangUrusanRepository;
 		this.opdRepository = opdRepository;
-        this.towerdataClient = towerdataClient;
 	}
 	
 	public Page<BidangUrusan> cariBidangUrusan(String kodeBidangUrusan, String namaBidangUrusan, int page, int size) {
@@ -39,16 +31,6 @@ public class BidangUrusanService {
 	public Iterable<BidangUrusan> getAllBidangUrusan() {
 		return bidangUrusanRepository.findAll();
 	}
-
-    public List<BidangUrusanSearchResponse> findAllFromApi() {
-        return towerdataClient.get()
-                .uri("/bidangurusan/detail/findall")
-                .retrieve()
-                .bodyToFlux(BidangUrusanSearchResponse.class)
-                .timeout(Duration.ofSeconds(5))
-                .collectList()
-                .block();
-    }
 	
 	public BidangUrusan detailBidangUrusan(String kodeBidangUrusan) {
         return bidangUrusanRepository.findByKodeBidangUrusan(kodeBidangUrusan)
