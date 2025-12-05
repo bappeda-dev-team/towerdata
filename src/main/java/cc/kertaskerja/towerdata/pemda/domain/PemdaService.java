@@ -6,12 +6,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.StreamSupport;
+
 @Service
 public class PemdaService {
     private PemdaRepository pemdaRepository;
 
     public PemdaService(PemdaRepository pemdaRepository) {
         this.pemdaRepository = pemdaRepository;
+    }
+
+    public List<Pemda> findAll() {
+        return StreamSupport.stream(pemdaRepository.findAll().spliterator(), false)
+                .toList();
     }
 
     public Page<Pemda> cariPemda(String kodePemda, String namaPemda, int page, int size) {
