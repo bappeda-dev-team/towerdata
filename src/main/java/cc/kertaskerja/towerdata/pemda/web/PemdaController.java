@@ -66,7 +66,6 @@ public class PemdaController {
 
         Pemda pemda = new Pemda(
                 existingPemda.id(),
-                request.idPemda(),
                 request.kodePemda(),
                 request.namaPemda(),
                 existingPemda.createdDate(),
@@ -79,7 +78,6 @@ public class PemdaController {
     @PostMapping
     public ResponseEntity<Pemda> post(@Valid @RequestBody PemdaRequest request) {
         Pemda pemda = Pemda.of(
-                request.idPemda(),
                 request.kodePemda(),
                 request.namaPemda()
         );

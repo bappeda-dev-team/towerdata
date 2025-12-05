@@ -1,0 +1,2 @@
+ALTER TABLE pemda
+DROP COLUMN IF EXISTS id_pemda;

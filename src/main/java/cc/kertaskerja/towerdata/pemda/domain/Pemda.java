@@ -13,9 +13,6 @@ public record Pemda (
         @Id
         Long id,
 
-        @Column("id_pemda")
-        String idPemda,
-
         @Column("kode_pemda")
         String kodePemda,
 
@@ -29,13 +26,11 @@ public record Pemda (
         Instant lastModifiedDate
 ) {
     public static Pemda of (
-            String idPemda,
             String kodePemda,
             String namaPemda
     ) {
         return new Pemda(
                 null,
-                idPemda,
                 kodePemda,
                 namaPemda,
                 null,
