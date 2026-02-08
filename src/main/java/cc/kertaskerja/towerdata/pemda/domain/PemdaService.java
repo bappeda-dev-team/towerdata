@@ -1,6 +1,7 @@
 package cc.kertaskerja.towerdata.pemda.domain;
 
 import cc.kertaskerja.towerdata.pemda.domain.exception.PemdaNotFoundException;
+import cc.kertaskerja.towerdata.pemda.web.PemdaRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +35,25 @@ public class PemdaService {
                 .orElseThrow(() -> new PemdaNotFoundException(kodePemda));
     }
 
-    public Pemda tambahPemda(Pemda pemda) {
+    public Pemda tambahPemda(PemdaRequest request) {
+        Pemda pemda = Pemda.of(
+                request.kodePemda(),
+                request.namaPemda()
+        );
+
         return pemdaRepository.save(pemda);
     }
 
-    public Pemda ubahPemda(String kodePemda, Pemda pemda) {
-        if (!pemdaRepository.existsByKodePemda(kodePemda)) {
-            throw new PemdaNotFoundException(kodePemda);
-        }
+    public Pemda ubahPemda(String kodePemda, PemdaRequest request) {
+        Pemda existingPemda = detailPemdaByKodePemda(kodePemda);
+
+        Pemda pemda = new Pemda(
+                existingPemda.id(),
+                request.kodePemda(),
+                request.namaPemda(),
+                existingPemda.createdDate(),
+                null
+        );
 
         return pemdaRepository.save(pemda);
     }

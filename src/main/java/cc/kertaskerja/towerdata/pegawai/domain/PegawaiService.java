@@ -5,6 +5,7 @@ import cc.kertaskerja.towerdata.jabatan.domain.exception.JabatanNotFoundExceptio
 import cc.kertaskerja.towerdata.pegawai.domain.exception.PegawaiNotFoundException;
 import cc.kertaskerja.towerdata.opd.domain.OpdRepository;
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
+import cc.kertaskerja.towerdata.pegawai.web.PegawaiRequest;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -48,40 +49,52 @@ public class PegawaiService {
                 .toList();
     }
 
-    public Pegawai tambahPegawai(Pegawai pegawai) {
-        // Validasi OPD jika kodeOpd tidak null
-        if (pegawai.kodeOpd() != null) {
-            if (!opdRepository.existsByKodeOpd(pegawai.kodeOpd())) {
-                throw new OpdNotFoundException(pegawai.kodeOpd());
-            }
+    public Pegawai tambahPegawai(PegawaiRequest request) {
+        if (request.kodeOpd() != null && !opdRepository.existsByKodeOpd(request.kodeOpd())) {
+            throw new OpdNotFoundException(request.kodeOpd());
         }
 
-        if (pegawai.kodeJabatan() != null) {
-            if (!jabatanRepository.existsByKodeJabatan(pegawai.kodeJabatan())) {
-                throw new JabatanNotFoundException(pegawai.kodeJabatan());
-            }
+        if (request.kodeJabatan() != null && !jabatanRepository.existsByKodeJabatan(request.kodeJabatan())) {
+            throw new JabatanNotFoundException(request.kodeJabatan());
         }
+
+        Pegawai pegawai = Pegawai.of(
+                request.nipPegawai(),
+                request.namaPegawai(),
+                request.kodeOpd(),
+                request.kodeJabatan(),
+                request.aktif() != null ? request.aktif() : false,
+                request.khusus() != null ? request.khusus() : false
+        );
 
         return pegawaiRepository.save(pegawai);
     }
 
-    public Pegawai ubahPegawai(String nipPegawai, Pegawai pegawai) {
-        if (!pegawaiRepository.existsByNipPegawai(nipPegawai)) {
-            throw new PegawaiNotFoundException(nipPegawai);
+    public Pegawai ubahPegawai(String nipPegawai, PegawaiRequest request) {
+        Pegawai existingPegawai = detailPegawai(nipPegawai);
+
+        if (request.kodeOpd() != null && !opdRepository.existsByKodeOpd(request.kodeOpd())) {
+            throw new OpdNotFoundException(request.kodeOpd());
         }
 
-        // Validasi OPD jika kodeOpd tidak null
-        if (pegawai.kodeOpd() != null) {
-            if (!opdRepository.existsByKodeOpd(pegawai.kodeOpd())) {
-                throw new OpdNotFoundException(pegawai.kodeOpd());
-            }
+        if (request.kodeJabatan() != null && !jabatanRepository.existsByKodeJabatan(request.kodeJabatan())) {
+            throw new JabatanNotFoundException(request.kodeJabatan());
         }
 
-        if (pegawai.kodeJabatan() != null) {
-            if (!jabatanRepository.existsByKodeJabatan(pegawai.kodeJabatan())) {
-                throw new JabatanNotFoundException(pegawai.kodeJabatan());
-            }
-        }
+        boolean aktif = request.aktif() != null ? request.aktif() : existingPegawai.aktif();
+        boolean khusus = request.khusus() != null ? request.khusus() : existingPegawai.khusus();
+
+        Pegawai pegawai = new Pegawai(
+                existingPegawai.id(),
+                request.nipPegawai(),
+                request.namaPegawai(),
+                request.kodeOpd(),
+                request.kodeJabatan(),
+                aktif,
+                khusus,
+                existingPegawai.createdDate(),
+                null
+        );
 
         return pegawaiRepository.save(pegawai);
     }

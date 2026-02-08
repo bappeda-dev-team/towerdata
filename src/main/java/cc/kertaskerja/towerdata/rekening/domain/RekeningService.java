@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cc.kertaskerja.towerdata.rekening.domain.exception.RekeningNotFoundException;
+import cc.kertaskerja.towerdata.rekening.web.RekeningRequest;
 
 @Service
 public class RekeningService {
@@ -35,17 +36,24 @@ public class RekeningService {
                 .toList();
     }
 
-    public Rekening tambahRekening(Rekening rekening) {
+    public Rekening tambahRekening(RekeningRequest request) {
+        Rekening rekening = Rekening.of(
+                request.kodeRekening(),
+                request.namaRekening(),
+                request.aktif()
+        );
+
         return rekeningRepository.save(rekening);
     }
 
-    public Rekening ubahRekening(String kodeRekening, Rekening rekening) {
+    public Rekening ubahRekening(String kodeRekening, RekeningRequest request) {
         Rekening existingRekening = detailRekening(kodeRekening);
+
         Rekening rekeningToSave = new Rekening(
                 existingRekening.id(),
-                rekening.kodeRekening(),
-                rekening.namaRekening(),
-                rekening.aktif(),
+                request.kodeRekening(),
+                request.namaRekening(),
+                request.aktif(),
                 existingRekening.createdDate(),
                 null
         );

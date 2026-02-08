@@ -2,6 +2,7 @@ package cc.kertaskerja.towerdata.kegiatan.web;
 
 import cc.kertaskerja.towerdata.kegiatan.domain.Kegiatan;
 import cc.kertaskerja.towerdata.kegiatan.domain.KegiatanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("kegiatan")
+@Tag(name = "Kegiatan")
 public class KegiatanController {
     private final KegiatanService kegiatanService;
 
@@ -69,31 +71,12 @@ public class KegiatanController {
 
     @PutMapping("update/{id}")
     public Kegiatan put(@PathVariable("id") Long id, @Valid @RequestBody KegiatanRequest request) {
-        // Ambil data kegiatan yang sudah dibuat
-        Kegiatan existingKegiatan = kegiatanService.detailKegiatan(id);
-
-        Kegiatan kegiatan = new Kegiatan(
-                id,
-                request.kodeKegiatan(),
-                request.namaKegiatan(),
-                request.kodePemda(),
-                request.penunjang(),
-                existingKegiatan.createdDate(),
-                null
-        );
-
-        return kegiatanService.ubahKegiatan(id, kegiatan);
+        return kegiatanService.ubahKegiatan(id, request);
     }
 
     @PostMapping
     public ResponseEntity<Kegiatan> post(@Valid @RequestBody KegiatanRequest request) {
-        Kegiatan kegiatan = Kegiatan.of(
-                request.kodeKegiatan(),
-                request.namaKegiatan(),
-                request.kodePemda(),
-                request.penunjang()
-        );
-        Kegiatan saved = kegiatanService.tambahKegiatan(kegiatan);
+        Kegiatan saved = kegiatanService.tambahKegiatan(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

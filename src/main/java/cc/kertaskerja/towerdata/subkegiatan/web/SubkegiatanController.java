@@ -8,6 +8,7 @@ import cc.kertaskerja.towerdata.subkegiatan.web.response.SubkegiatanByOpdRequest
 import cc.kertaskerja.towerdata.subkegiatan.web.response.SubkegiatanOpdResponse;
 import cc.kertaskerja.towerdata.subkegiatan.web.response.SubkegiatanRequest;
 import cc.kertaskerja.towerdata.subkegiatan.web.response.SubkegiatanSearchResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("subkegiatan")
+@Tag(name = "Subkegiatan")
 public class SubkegiatanController {
     private final SubKegiatanService subKegiatanService;
     private final OpdService opdService;

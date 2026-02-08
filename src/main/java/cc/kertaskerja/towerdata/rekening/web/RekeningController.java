@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.rekening.domain.Rekening;
 import cc.kertaskerja.towerdata.rekening.domain.RekeningService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("rekening")
+@Tag(name = "Rekening")
 public class RekeningController {
     private final RekeningService rekeningService;
 
@@ -66,29 +68,12 @@ public class RekeningController {
 
     @PutMapping("update/{kodeRekening}")
     public Rekening put(@PathVariable("kodeRekening") String kodeRekening, @Valid @RequestBody RekeningRequest request) {
-        // Ambil data Rekening yang sudah dibuat
-        Rekening existingRekening = rekeningService.detailRekening(kodeRekening);
-
-        Rekening rekening = new Rekening(
-                existingRekening.id(),
-                request.kodeRekening(),
-                request.namaRekening(),
-                request.aktif(),
-                existingRekening.createdDate(),
-                null
-        );
-
-        return rekeningService.ubahRekening(kodeRekening, rekening);
+        return rekeningService.ubahRekening(kodeRekening, request);
     }
 
     @PostMapping
     public ResponseEntity<Rekening> post(@Valid @RequestBody RekeningRequest request) {
-        Rekening rekening = Rekening.of(
-                request.kodeRekening(),
-                request.namaRekening(),
-                request.aktif()
-        );
-        Rekening saved = rekeningService.tambahRekening(rekening);
+        Rekening saved = rekeningService.tambahRekening(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{kodeRekening}")

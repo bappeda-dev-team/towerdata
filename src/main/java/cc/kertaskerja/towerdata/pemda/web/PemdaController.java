@@ -3,6 +3,7 @@ package cc.kertaskerja.towerdata.pemda.web;
 import cc.kertaskerja.towerdata.pemda.domain.Pemda;
 import cc.kertaskerja.towerdata.pemda.domain.PemdaService;
 import cc.kertaskerja.towerdata.pemda.web.response.PemdaSearchResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("pemda")
+@Tag(name = "Pemda")
 public class PemdaController {
     private final PemdaService pemdaService;
 
@@ -62,26 +64,12 @@ public class PemdaController {
 
     @PutMapping("update/{kodePemda}")
     public Pemda put(@PathVariable("kodePemda") String kodePemda, @Valid @RequestBody PemdaRequest request) {
-        Pemda existingPemda = pemdaService.detailPemdaByKodePemda(kodePemda);
-
-        Pemda pemda = new Pemda(
-                existingPemda.id(),
-                request.kodePemda(),
-                request.namaPemda(),
-                existingPemda.createdDate(),
-                null
-        );
-
-        return pemdaService.ubahPemda(kodePemda, pemda);
+        return pemdaService.ubahPemda(kodePemda, request);
     }
 
     @PostMapping
     public ResponseEntity<Pemda> post(@Valid @RequestBody PemdaRequest request) {
-        Pemda pemda = Pemda.of(
-                request.kodePemda(),
-                request.namaPemda()
-        );
-        Pemda saved = pemdaService.tambahPemda(pemda);
+        Pemda saved = pemdaService.tambahPemda(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

@@ -23,10 +23,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.pegawai.domain.Pegawai;
 import cc.kertaskerja.towerdata.pegawai.domain.PegawaiService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("pegawai")
+@Tag(name = "Pegawai")
 public class PegawaiController {
 	private final PegawaiService pegawaiService;
 	private final OpdService opdService;
@@ -82,35 +84,12 @@ public class PegawaiController {
 	
 	@PutMapping("update/{nipPegawai}")
     public Pegawai put(@PathVariable("nipPegawai") String nipPegawai, @Valid @RequestBody PegawaiRequest request) {
-        // Ambil data pegawai yang sudah dibuat
-        Pegawai existingPegawai = pegawaiService.detailPegawai(nipPegawai);
-
-        Pegawai pegawai = new Pegawai(
-                existingPegawai.id(),
-                request.nipPegawai(),
-                request.namaPegawai(),
-                request.kodeOpd(),
-                request.kodeJabatan(),
-                request.aktif() != null ? request.aktif() : existingPegawai.aktif(),
-                request.khusus() != null ? request.khusus() : existingPegawai.khusus(),
-                existingPegawai.createdDate(),
-                null
-        );
-
-        return pegawaiService.ubahPegawai(nipPegawai, pegawai);
+        return pegawaiService.ubahPegawai(nipPegawai, request);
     }
 	
     @PostMapping
     public ResponseEntity<Pegawai> post(@Valid @RequestBody PegawaiRequest request) {
-        Pegawai pegawai = Pegawai.of(
-                request.nipPegawai(),
-                request.namaPegawai(),
-                request.kodeOpd(),
-                request.kodeJabatan(),
-                request.aktif() != null ? request.aktif() : false,
-                request.khusus() != null ? request.khusus() : false
-        );
-        Pegawai saved = pegawaiService.tambahPegawai(pegawai);
+        Pegawai saved = pegawaiService.tambahPegawai(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

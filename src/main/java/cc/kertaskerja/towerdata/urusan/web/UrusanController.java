@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.urusan.domain.Urusan;
 import cc.kertaskerja.towerdata.urusan.domain.UrusanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("urusan")
+@Tag(name = "Urusan")
 public class UrusanController {
 	public final UrusanService urusanService;
 	
@@ -78,31 +80,12 @@ public class UrusanController {
 	
 	@PutMapping("update/{id}")
     public Urusan put(@PathVariable("id") Long id, @Valid @RequestBody UrusanRequest request) {
-        // Ambil data urusan yang sudah dibuat
-        Urusan existingUrusan = urusanService.detailUrusan(id);
-
-        Urusan urusan = new Urusan(
-                id,
-                request.kodeUrusan(),
-                request.namaUrusan(),
-                request.kodePemda(),
-                request.penunjang(),
-                existingUrusan.createdDate(),
-                null
-        );
-
-        return urusanService.ubahUrusan(id, urusan);
+        return urusanService.ubahUrusan(id, request);
     }
 	
 	@PostMapping
     public ResponseEntity<Urusan> post(@Valid @RequestBody UrusanRequest request) {
-        Urusan urusan = Urusan.of(
-                request.kodeUrusan(),
-                request.namaUrusan(),
-                request.kodePemda(),
-                request.penunjang()
-        );
-        Urusan saved = urusanService.tambahUrusan(urusan);
+        Urusan saved = urusanService.tambahUrusan(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

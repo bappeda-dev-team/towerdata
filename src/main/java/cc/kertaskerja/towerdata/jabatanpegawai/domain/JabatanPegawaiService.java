@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cc.kertaskerja.towerdata.jabatanpegawai.domain.exception.JabatanPegawaiNotFoundException;
+import cc.kertaskerja.towerdata.jabatanpegawai.web.JabatanPegawaiRequest;
 
 @Service
 public class JabatanPegawaiService {
@@ -33,17 +34,30 @@ public class JabatanPegawaiService {
         return jabatanPegawaiRepository.findAll(Pageable.unpaged()).getContent();
     }
 	
-	public JabatanPegawai tambahJabatanPegawai(JabatanPegawai jabatanPegawai) {
-        return jabatanPegawaiRepository.save(jabatanPegawai);
-    }
-	
-	public JabatanPegawai ubahJabatanPegawai(Long id, JabatanPegawai jabatanPegawai) {
-        if (!jabatanPegawaiRepository.existsById(id)) {
-            throw new JabatanPegawaiNotFoundException(id);
-        }
+	public JabatanPegawai tambahJabatanPegawai(JabatanPegawaiRequest request) {
+        JabatanPegawai jabatanPegawai = JabatanPegawai.of(
+                request.nipPegawai(),
+                request.kodeJabatan(),
+                request.kodePemda()
+        );
 
         return jabatanPegawaiRepository.save(jabatanPegawai);
-    }
+	}
+
+	public JabatanPegawai ubahJabatanPegawai(Long id, JabatanPegawaiRequest request) {
+        JabatanPegawai existingJabatanPegawai = detailJabatanPegawai(id);
+
+        JabatanPegawai jabatanPegawai = new JabatanPegawai(
+                existingJabatanPegawai.id(),
+                request.nipPegawai(),
+                request.kodeJabatan(),
+                request.kodePemda(),
+                existingJabatanPegawai.createdDate(),
+                null
+        );
+
+        return jabatanPegawaiRepository.save(jabatanPegawai);
+	}
 	
 	public void hapusJabatanPegawai(Long id) {
         if (!jabatanPegawaiRepository.existsById(id)) {

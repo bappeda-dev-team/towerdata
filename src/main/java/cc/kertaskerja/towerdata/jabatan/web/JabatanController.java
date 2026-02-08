@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.jabatan.domain.Jabatan;
 import cc.kertaskerja.towerdata.jabatan.domain.JabatanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("jabatan")
+@Tag(name = "Jabatan")
 public class JabatanController {
     private final JabatanService jabatanService;
 
@@ -68,29 +70,12 @@ public class JabatanController {
 
     @PutMapping("update/{kodeJabatan}")
     public Jabatan put(@PathVariable("kodeJabatan") String kodeJabatan, @Valid @RequestBody JabatanRequest request) {
-        // Ambil data jabatan yang sudah dibuat
-        Jabatan existingJabatan = jabatanService.detailJabatan(kodeJabatan);
-
-        Jabatan jabatan = new Jabatan(
-                existingJabatan.id(),
-                request.kodeJabatan(),
-                request.namaJabatan(),
-                request.struktural(),
-                existingJabatan.createdDate(),
-                null
-        );
-
-        return jabatanService.ubahJabatan(kodeJabatan, jabatan);
+        return jabatanService.ubahJabatan(kodeJabatan, request);
     }
 
     @PostMapping
     public ResponseEntity<Jabatan> post(@Valid @RequestBody JabatanRequest request) {
-        Jabatan jabatan = Jabatan.of(
-                request.kodeJabatan(),
-                request.namaJabatan(),
-                request.struktural()
-        );
-        Jabatan saved = jabatanService.tambahJabatan(jabatan);
+        Jabatan saved = jabatanService.tambahJabatan(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{kode}")

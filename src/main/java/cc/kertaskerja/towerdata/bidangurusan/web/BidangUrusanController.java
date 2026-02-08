@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.bidangurusan.domain.BidangUrusan;
 import cc.kertaskerja.towerdata.bidangurusan.domain.BidangUrusanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("bidangurusan")
+@Tag(name = "Bidang Urusan")
 public class BidangUrusanController {
 	private final BidangUrusanService bidangUrusanService;
 	

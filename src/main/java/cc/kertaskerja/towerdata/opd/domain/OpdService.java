@@ -1,6 +1,7 @@
 package cc.kertaskerja.towerdata.opd.domain;
 
 import cc.kertaskerja.towerdata.opd.domain.exception.OpdNotFoundException;
+import cc.kertaskerja.towerdata.opd.web.OpdRequest;
 import cc.kertaskerja.towerdata.pemda.domain.PemdaRepository;
 import cc.kertaskerja.towerdata.pemda.domain.exception.PemdaNotFoundException;
 import org.springframework.data.domain.Page;
@@ -38,22 +39,37 @@ public class OpdService {
                 .orElseThrow(() -> new OpdNotFoundException(kodeOpd));
     }
 
-    public Opd tambahOpd(Opd opd) {
-        if (opd.kodePemda() != null && !pemdaRepository.existsByKodePemda(opd.kodePemda())) {
-            throw new PemdaNotFoundException(opd.kodePemda());
+    public Opd tambahOpd(OpdRequest request) {
+        if (request.kodePemda() != null && !pemdaRepository.existsByKodePemda(request.kodePemda())) {
+            throw new PemdaNotFoundException(request.kodePemda());
         }
+
+        Opd opd = Opd.of(
+                request.kodeOpd(),
+                request.namaOpd(),
+                request.kodePemda(),
+                request.subOpd()
+        );
 
         return opdRepository.save(opd);
     }
 
-    public Opd ubahOpd(String kodeOpd, Opd opd) {
-        if (!opdRepository.existsByKodeOpd(kodeOpd)) {
-            throw new OpdNotFoundException(kodeOpd);
+    public Opd ubahOpd(String kodeOpd, OpdRequest request) {
+        Opd existingOpd = detailOpdByKodeOpd(kodeOpd);
+
+        if (request.kodePemda() != null && !pemdaRepository.existsByKodePemda(request.kodePemda())) {
+            throw new PemdaNotFoundException(request.kodePemda());
         }
 
-        if (opd.kodePemda() != null && !pemdaRepository.existsByKodePemda(opd.kodePemda())) {
-            throw new PemdaNotFoundException(opd.kodePemda());
-        }
+        Opd opd = new Opd(
+                existingOpd.id(),
+                request.kodeOpd(),
+                request.namaOpd(),
+                request.kodePemda(),
+                request.subOpd(),
+                existingOpd.createdDate(),
+                null
+        );
 
         return opdRepository.save(opd);
     }

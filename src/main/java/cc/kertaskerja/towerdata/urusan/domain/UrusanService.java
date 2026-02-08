@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cc.kertaskerja.towerdata.urusan.domain.exception.UrusanNotFoundException;
+import cc.kertaskerja.towerdata.urusan.web.UrusanRequest;
 
 @Service
 public class UrusanService {
@@ -36,14 +37,29 @@ public class UrusanService {
                 .orElseThrow(() -> new UrusanNotFoundException(id));
     }
 	
-	public Urusan tambahUrusan(Urusan urusan) {
+	public Urusan tambahUrusan(UrusanRequest request) {
+        Urusan urusan = Urusan.of(
+                request.kodeUrusan(),
+                request.namaUrusan(),
+                request.kodePemda(),
+                request.penunjang()
+        );
+
         return urusanRepository.save(urusan);
     }
-	
-	public Urusan ubahUrusan(Long id, Urusan urusan) {
-        if (!urusanRepository.existsById(id)) {
-            throw new UrusanNotFoundException(id);
-        }
+
+	public Urusan ubahUrusan(Long id, UrusanRequest request) {
+        Urusan existingUrusan = detailUrusan(id);
+
+        Urusan urusan = new Urusan(
+                existingUrusan.id(),
+                request.kodeUrusan(),
+                request.namaUrusan(),
+                request.kodePemda(),
+                request.penunjang(),
+                existingUrusan.createdDate(),
+                null
+        );
 
         return urusanRepository.save(urusan);
     }

@@ -2,6 +2,7 @@ package cc.kertaskerja.towerdata.user.web;
 
 import cc.kertaskerja.towerdata.user.domain.User;
 import cc.kertaskerja.towerdata.user.domain.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
+@Tag(name = "User")
 public class UserController {
     public final UserService userService;
 

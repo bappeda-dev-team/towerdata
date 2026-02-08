@@ -1,6 +1,7 @@
 package cc.kertaskerja.towerdata.program.domain;
 
 import cc.kertaskerja.towerdata.program.domain.exception.ProgramNotFoundException;
+import cc.kertaskerja.towerdata.program.web.ProgramRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,14 +36,29 @@ public class ProgramService {
                 .orElseThrow(() -> new ProgramNotFoundException(id));
     }
 
-    public Program tambahProgram(Program program) {
+    public Program tambahProgram(ProgramRequest request) {
+        Program program = Program.of(
+                request.kodeProgram(),
+                request.namaProgram(),
+                request.kodePemda(),
+                request.penunjang()
+        );
+
         return programRepository.save(program);
     }
 
-    public Program ubahProgram(Long id, Program program) {
-        if (!programRepository.existsById(id)) {
-            throw new ProgramNotFoundException(id);
-        }
+    public Program ubahProgram(Long id, ProgramRequest request) {
+        Program existingProgram = detailProgram(id);
+
+        Program program = new Program(
+                existingProgram.id(),
+                request.kodeProgram(),
+                request.namaProgram(),
+                request.kodePemda(),
+                request.penunjang(),
+                existingProgram.createdDate(),
+                null
+        );
 
         return programRepository.save(program);
     }

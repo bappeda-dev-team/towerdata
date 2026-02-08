@@ -2,6 +2,7 @@ package cc.kertaskerja.towerdata.program.web;
 
 import cc.kertaskerja.towerdata.program.domain.Program;
 import cc.kertaskerja.towerdata.program.domain.ProgramService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("program")
+@Tag(name = "Program")
 public class ProgramController {
     private final ProgramService programService;
 
@@ -68,31 +70,12 @@ public class ProgramController {
 
     @PutMapping("update/{id}")
     public Program put(@PathVariable("id") Long id, @Valid @RequestBody ProgramRequest request) {
-        // Ambil data program yang sudah dibuat
-        Program existingProgram = programService.detailProgram(id);
-
-        Program program = new Program(
-                id,
-                request.kodeProgram(),
-                request.namaProgram(),
-                request.kodePemda(),
-                request.penunjang(),
-                existingProgram.createdDate(),
-                null
-        );
-
-        return programService.ubahProgram(id, program);
+        return programService.ubahProgram(id, request);
     }
 
     @PostMapping
     public ResponseEntity<Program> post(@Valid @RequestBody ProgramRequest request) {
-        Program program = Program.of(
-                request.kodeProgram(),
-                request.namaProgram(),
-                request.kodePemda(),
-                request.penunjang()
-        );
-        Program saved = programService.tambahProgram(program);
+        Program saved = programService.tambahProgram(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

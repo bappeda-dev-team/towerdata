@@ -6,6 +6,7 @@ import cc.kertaskerja.towerdata.opd.web.response.OpdSearchResponse;
 import cc.kertaskerja.towerdata.opd.web.response.OpdSelectionResponse;
 import cc.kertaskerja.towerdata.pegawai.domain.PegawaiService;
 import cc.kertaskerja.towerdata.bidangurusan.domain.BidangUrusanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("opd")
+@Tag(name = "OPD")
 public class OpdController {
     private final OpdService opdService;
     private final PegawaiService pegawaiService;
@@ -79,30 +81,12 @@ public class OpdController {
 
     @PutMapping("update/{kodeOpd}")
     public Opd put(@PathVariable("kodeOpd") String kodeOpd, @Valid @RequestBody OpdRequest request) {
-        Opd existingOpd = opdService.detailOpdByKodeOpd(kodeOpd);
-
-        Opd opd = new Opd(
-                existingOpd.id(),
-                request.kodeOpd(),
-                request.namaOpd(),
-                request.kodePemda(),
-                request.subOpd(),
-                existingOpd.createdDate(),
-                null
-        );
-
-        return opdService.ubahOpd(kodeOpd, opd);
+        return opdService.ubahOpd(kodeOpd, request);
     }
 
     @PostMapping
     public ResponseEntity<Opd> post(@Valid @RequestBody OpdRequest request) {
-        Opd opd = Opd.of(
-                request.kodeOpd(),
-                request.namaOpd(),
-                request.kodePemda(),
-                request.subOpd()
-        );
-        Opd saved = opdService.tambahOpd(opd);
+        Opd saved = opdService.tambahOpd(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

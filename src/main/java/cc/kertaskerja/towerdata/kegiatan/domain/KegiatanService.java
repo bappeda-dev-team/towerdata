@@ -1,6 +1,7 @@
 package cc.kertaskerja.towerdata.kegiatan.domain;
 
 import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanNotFoundException;
+import cc.kertaskerja.towerdata.kegiatan.web.KegiatanRequest;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,14 +37,29 @@ public class KegiatanService {
                 .orElseThrow(() -> new KegiatanNotFoundException(id));
     }
 
-    public Kegiatan tambahKegiatan(Kegiatan kegiatan) {
+    public Kegiatan tambahKegiatan(KegiatanRequest request) {
+        Kegiatan kegiatan = Kegiatan.of(
+                request.kodeKegiatan(),
+                request.namaKegiatan(),
+                request.kodePemda(),
+                request.penunjang()
+        );
+
         return kegiatanRepository.save(kegiatan);
     }
 
-    public Kegiatan ubahKegiatan(Long id, Kegiatan kegiatan) {
-        if (!kegiatanRepository.existsById(id)) {
-            throw new KegiatanNotFoundException(id);
-        }
+    public Kegiatan ubahKegiatan(Long id, KegiatanRequest request) {
+        Kegiatan existingKegiatan = detailKegiatan(id);
+
+        Kegiatan kegiatan = new Kegiatan(
+                existingKegiatan.id(),
+                request.kodeKegiatan(),
+                request.namaKegiatan(),
+                request.kodePemda(),
+                request.penunjang(),
+                existingKegiatan.createdDate(),
+                null
+        );
 
         return kegiatanRepository.save(kegiatan);
     }

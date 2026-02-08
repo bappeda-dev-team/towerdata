@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import cc.kertaskerja.towerdata.jabatan.domain.exception.JabatanNotFoundException;
+import cc.kertaskerja.towerdata.jabatan.web.JabatanRequest;
 
 @Service
 public class JabatanService {
@@ -33,14 +34,27 @@ public class JabatanService {
         return jabatanRepository.findAll(Pageable.unpaged()).getContent();
     }
 
-    public Jabatan tambahJabatan(Jabatan jabatan) {
+    public Jabatan tambahJabatan(JabatanRequest request) {
+        Jabatan jabatan = Jabatan.of(
+                request.kodeJabatan(),
+                request.namaJabatan(),
+                request.struktural()
+        );
+
         return jabatanRepository.save(jabatan);
     }
 
-    public Jabatan ubahJabatan(String kodeJabatan, Jabatan jabatan) {
-        if (!jabatanRepository.existsByKodeJabatan(kodeJabatan)) {
-            throw new JabatanNotFoundException(kodeJabatan);
-        }
+    public Jabatan ubahJabatan(String kodeJabatan, JabatanRequest request) {
+        Jabatan existingJabatan = detailJabatan(kodeJabatan);
+
+        Jabatan jabatan = new Jabatan(
+                existingJabatan.id(),
+                request.kodeJabatan(),
+                request.namaJabatan(),
+                request.struktural(),
+                existingJabatan.createdDate(),
+                null
+        );
 
         return jabatanRepository.save(jabatan);
     }

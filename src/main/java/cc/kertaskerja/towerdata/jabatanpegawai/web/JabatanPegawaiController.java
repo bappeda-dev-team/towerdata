@@ -20,10 +20,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import cc.kertaskerja.towerdata.jabatanpegawai.domain.JabatanPegawai;
 import cc.kertaskerja.towerdata.jabatanpegawai.domain.JabatanPegawaiService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("jabatanpegawai")
+@Tag(name = "Jabatan Pegawai")
 public class JabatanPegawaiController {
 	public JabatanPegawaiService jabatanPegawaiService;
 	
@@ -68,29 +70,12 @@ public class JabatanPegawaiController {
 	
 	@PutMapping("update/{id}")
     public JabatanPegawai put(@PathVariable("id") Long id, @Valid @RequestBody JabatanPegawaiRequest request) {
-        // Ambil data jabatan pegawai yang sudah dibuat
-        JabatanPegawai existingJabatanPegawai = jabatanPegawaiService.detailJabatanPegawai(id);
-
-        JabatanPegawai jabatanPegawai = new JabatanPegawai(
-                id,
-                request.nipPegawai(),
-                request.kodeJabatan(),
-                request.kodePemda(),
-                existingJabatanPegawai.createdDate(),
-                null
-        );
-
-        return jabatanPegawaiService.ubahJabatanPegawai(id, jabatanPegawai);
+        return jabatanPegawaiService.ubahJabatanPegawai(id, request);
     }
 	
 	@PostMapping
     public ResponseEntity<JabatanPegawai> post(@Valid @RequestBody JabatanPegawaiRequest request) {
-        JabatanPegawai jabatanPegawai= JabatanPegawai.of(
-                request.nipPegawai(),
-                request.kodeJabatan(),
-                request.kodePemda()
-        );
-        JabatanPegawai saved = jabatanPegawaiService.tambahJabatanPegawai(jabatanPegawai);
+        JabatanPegawai saved = jabatanPegawaiService.tambahJabatanPegawai(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{kode}")
