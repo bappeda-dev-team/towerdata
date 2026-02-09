@@ -22,13 +22,9 @@ import java.util.List;
 @Tag(name = "OPD")
 public class OpdController {
     private final OpdService opdService;
-    private final PegawaiService pegawaiService;
-    private final BidangUrusanService bidangUrusanService;
 
     public OpdController(OpdService opdService, PegawaiService pegawaiService, BidangUrusanService bidangUrusanService) {
         this.opdService = opdService;
-        this.pegawaiService = pegawaiService;
-        this.bidangUrusanService = bidangUrusanService;
     }
     
     /**
@@ -58,8 +54,7 @@ public class OpdController {
         return opds.stream()
                 .map(opd -> new OpdSearchResponse(
                         opd.kodeOpd(),
-                        opd.namaOpd(),
-                        opd.subOpd()
+                        opd.namaOpd()
                 ))
                 .toList();
     }

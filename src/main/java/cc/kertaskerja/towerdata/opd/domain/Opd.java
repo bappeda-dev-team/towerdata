@@ -19,12 +19,6 @@ public record Opd(
         @Column("nama_opd")
         String namaOpd,
 
-        @Column("kode_pemda")
-        String kodePemda,
-
-        @Column("sub_opd")
-        Boolean subOpd,
-
         @CreatedDate
         Instant createdDate,
 
@@ -33,16 +27,12 @@ public record Opd(
 ) {
     public static Opd of (
             String kodeOpd,
-            String namaOpd,
-            String kodePemda,
-            Boolean subOpd
+            String namaOpd
     ) {
         return new Opd(
                 null,
                 kodeOpd,
                 namaOpd,
-                kodePemda,
-                subOpd,
                 null,
                 null
         );
