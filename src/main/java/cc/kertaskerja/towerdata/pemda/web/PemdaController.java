@@ -29,7 +29,7 @@ public class PemdaController {
         return pemdaService.detailPemdaByKodePemda(kodePemda);
     }
 
-    @GetMapping("detail/findall")
+    @GetMapping("detail/get-all-pemdas")
     public List<PemdaSearchResponse> findAll() {
         return pemdaService.findAll()
                 .stream()
@@ -40,7 +40,7 @@ public class PemdaController {
                 .toList();
     }
 
-    @GetMapping("/detail/cari")
+    @GetMapping("/detail/cari-pemdas")
     public List<PemdaSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodePemda,
             @RequestParam(value = "nama", required = false) String namaPemda,

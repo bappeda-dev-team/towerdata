@@ -3,6 +3,8 @@ package cc.kertaskerja.towerdata.kegiatan.domain;
 import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanNotFoundException;
 import cc.kertaskerja.towerdata.kegiatan.web.KegiatanRequest;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,10 @@ public class KegiatanService {
         return kegiatanRepository.findByKodeKegiatanContainingIgnoreCaseAndNamaKegiatanContainingIgnoreCase(
                 kodeKegiatan, namaKegiatan, pageable
         );
+    }
+    
+    public List<Kegiatan> semuaKegiatan() {
+        return kegiatanRepository.findAll(Pageable.unpaged()).getContent();
     }
     
     public Page<Kegiatan> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {

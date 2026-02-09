@@ -17,6 +17,10 @@ public class SubKegiatanService {
         this.subKegiatanRepository = subKegiatanRepository;
     }
 
+    public List<SubKegiatan> semuaSubKegiatan() {
+        return subKegiatanRepository.findAll(Pageable.unpaged()).getContent();
+    }
+    
     public Page<SubKegiatan> cariSubKegiatan(String kodeSubKegiatan, String namaSubKegiatan, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return subKegiatanRepository.findByKodeSubKegiatanContainingIgnoreCaseAndNamaSubKegiatanContainingIgnoreCase(

@@ -37,8 +37,20 @@ public class SubkegiatanController {
     public SubKegiatan getById(@PathVariable("id") Long id) {
         return subKegiatanService.detailSubKegiatan(id);
     }
+    
+    @GetMapping("detail/get-all-subkegiatans")
+    public List<SubkegiatanSearchResponse> findAll() {
+        return subKegiatanService.semuaSubKegiatan().stream()
+                .map(subKegiatan -> new SubkegiatanSearchResponse(
+                        subKegiatan.kodeOpd(),
+                        subKegiatan.kodeSubKegiatan(),
+                        subKegiatan.namaSubKegiatan(),
+                        subKegiatan.penunjang()
+                ))
+                .toList();
+    }
 
-    @GetMapping("search")
+    @GetMapping("detail/cari-subkegiatans")
     public List<SubkegiatanSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeSubKegiatan,
             @RequestParam(value = "nama", required = false) String namaSubKegiatan,
@@ -62,7 +74,7 @@ public class SubkegiatanController {
                 .toList();
     }
 
-    @GetMapping("penunjang/search")
+    @GetMapping("detail/penunjang/cari-subkegiatans")
     public List<SubkegiatanSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,

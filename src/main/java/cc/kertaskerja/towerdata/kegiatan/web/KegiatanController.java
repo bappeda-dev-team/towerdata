@@ -29,7 +29,18 @@ public class KegiatanController {
         return kegiatanService.detailKegiatan(id);
     }
     
-    @GetMapping("search")
+    @GetMapping("detail/get-all-kegiatans")
+    public List<KegiatanSearchResponse> findAll() {
+        return kegiatanService.semuaKegiatan().stream()
+                .map(kegiatan -> new KegiatanSearchResponse(
+                        kegiatan.kodeKegiatan(),
+                        kegiatan.namaKegiatan(),
+                        kegiatan.penunjang()
+                ))
+                .toList();
+    }
+    
+    @GetMapping("detail/cari-kegiatans")
     public List<KegiatanSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeKegiatan,
             @RequestParam(value = "nama", required = false) String namaKegiatan,
@@ -52,7 +63,7 @@ public class KegiatanController {
                 .toList();
     }
     
-    @GetMapping("penunjang/search")
+    @GetMapping("detail/penunjang/cari-kegiatans")
     public List<KegiatanSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,

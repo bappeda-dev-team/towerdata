@@ -2,6 +2,7 @@ package cc.kertaskerja.towerdata.program.domain;
 
 import cc.kertaskerja.towerdata.program.domain.exception.ProgramNotFoundException;
 import cc.kertaskerja.towerdata.program.web.ProgramRequest;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,10 @@ public class ProgramService {
         return programRepository.findByKodeProgramContainingIgnoreCaseAndNamaProgramContainingIgnoreCase(
                 kodeProgram, namaProgram, pageable
         );
+    }
+
+    public List<Program> semuaProgram() {
+        return programRepository.findAll(Pageable.unpaged()).getContent();
     }
 
     public Page<Program> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {

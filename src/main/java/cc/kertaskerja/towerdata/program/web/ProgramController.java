@@ -28,7 +28,18 @@ public class ProgramController {
         return programService.detailProgram(id);
     }
 
-    @GetMapping("search")
+    @GetMapping("detail/get-all-programs")
+    public List<ProgramSearchResponse> findAll() {
+        return programService.semuaProgram().stream()
+                .map(program -> new ProgramSearchResponse(
+                        program.kodeProgram(),
+                        program.namaProgram(),
+                        program.penunjang()
+                ))
+                .toList();
+    }
+
+    @GetMapping("detail/cari-programs")
     public List<ProgramSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeProgram,
             @RequestParam(value = "nama", required = false) String namaProgram,
@@ -51,7 +62,7 @@ public class ProgramController {
                 .toList();
     }
 
-    @GetMapping("penunjang/search")
+    @GetMapping("detail/penunjang/cari-programs")
     public List<ProgramSearchResponse> getPenunjangSearchData(
             @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
             @RequestParam(value = "page", defaultValue = "0") int page,

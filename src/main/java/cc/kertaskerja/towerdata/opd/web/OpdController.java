@@ -41,7 +41,7 @@ public class OpdController {
         return opdService.detailOpdByKodeOpd(kodeOpd);
     }
 
-    @GetMapping("/detail/cari")
+    @GetMapping("/detail/cari-opds")
     public List<OpdSearchResponse> search(
             @RequestParam(value = "kode", required = false) String kodeOpd,
             @RequestParam(value = "nama", required = false) String namaOpd,
@@ -63,12 +63,8 @@ public class OpdController {
                 ))
                 .toList();
     }
-
-    /**
-     * pilih all opd
-     * @return list semua data opd
-     */
-    @GetMapping("detail/findall")
+    
+    @GetMapping("detail/get-all-opds")
     public List<OpdSelectionResponse> getOpdSelection() {
         return opdService.findAll()
                 .stream()
