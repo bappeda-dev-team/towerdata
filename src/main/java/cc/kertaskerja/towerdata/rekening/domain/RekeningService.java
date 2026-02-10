@@ -39,8 +39,7 @@ public class RekeningService {
     public Rekening tambahRekening(RekeningRequest request) {
         Rekening rekening = Rekening.of(
                 request.kodeRekening(),
-                request.namaRekening(),
-                request.aktif()
+                request.namaRekening()
         );
 
         return rekeningRepository.save(rekening);
@@ -53,7 +52,6 @@ public class RekeningService {
                 existingRekening.id(),
                 request.kodeRekening(),
                 request.namaRekening(),
-                request.aktif(),
                 existingRekening.createdDate(),
                 null
         );

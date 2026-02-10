@@ -38,7 +38,7 @@ public class RekeningController {
         return rekeningService.detailRekening(kodeRekening);
     }
 
-    @GetMapping("detail/findall")
+    @GetMapping("detail/get-all-rekenings")
     public List<Rekening> getAll() {
         return rekeningService.semuaRekening();
     }
@@ -60,8 +60,7 @@ public class RekeningController {
         return rekenings.stream()
                 .map(rekening -> new RekeningSearchResponse(
                         rekening.kodeRekening(),
-                        rekening.namaRekening(),
-                        rekening.aktif()
+                        rekening.namaRekening()
                 ))
                 .toList();
     }
