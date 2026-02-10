@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.program.web;
 
-import cc.kertaskerja.towerdata.kegiatan.domain.exception.KegiatanNotFoundException;
 import cc.kertaskerja.towerdata.program.domain.exception.ProgramAlreadyExistException;
 import cc.kertaskerja.towerdata.program.domain.exception.ProgramNotFoundException;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.program.domain;
 
-import cc.kertaskerja.towerdata.kegiatan.domain.Kegiatan;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,12 +19,6 @@ public record Program(
         @Column("nama_program")
         String namaProgram,
 
-        @Column("kode_pemda")
-        String kodePemda,
-
-        @Column("penunjang")
-        Boolean penunjang,
-
         @CreatedDate
         Instant createdDate,
 
@@ -34,16 +27,12 @@ public record Program(
 ) {
     public static Program of (
             String kodeProgram,
-            String namaProgram,
-            String kodePemda,
-            Boolean penunjang
+            String namaProgram
     ) {
         return new Program(
                 null,
                 kodeProgram,
                 namaProgram,
-                kodePemda,
-                penunjang,
                 null,
                 null
         );

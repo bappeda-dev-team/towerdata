@@ -1,6 +1,5 @@
 package cc.kertaskerja.towerdata.program.domain;
 
-import cc.kertaskerja.towerdata.kegiatan.domain.Kegiatan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Modifying;
@@ -21,9 +20,6 @@ public interface ProgramRepository extends CrudRepository<Program, Long> {
             @NonNull String namaProgram,
             @NonNull Pageable pageable
     );
-
-    @NonNull
-    Page<Program> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
 
     @NonNull
     Page<Program> findAll(@NonNull Pageable pageable);

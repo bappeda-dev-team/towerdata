@@ -27,15 +27,6 @@ public class ProgramService {
         return programRepository.findAll(Pageable.unpaged()).getContent();
     }
 
-    public Page<Program> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return programRepository.findAll(pageable);
-        } else {
-            return programRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
-
     public Program detailProgram(Long id) {
         return programRepository.findById(id)
                 .orElseThrow(() -> new ProgramNotFoundException(id));
@@ -44,9 +35,7 @@ public class ProgramService {
     public Program tambahProgram(ProgramRequest request) {
         Program program = Program.of(
                 request.kodeProgram(),
-                request.namaProgram(),
-                request.kodePemda(),
-                request.penunjang()
+                request.namaProgram()
         );
 
         return programRepository.save(program);
@@ -59,8 +48,6 @@ public class ProgramService {
                 existingProgram.id(),
                 request.kodeProgram(),
                 request.namaProgram(),
-                request.kodePemda(),
-                request.penunjang(),
                 existingProgram.createdDate(),
                 null
         );
