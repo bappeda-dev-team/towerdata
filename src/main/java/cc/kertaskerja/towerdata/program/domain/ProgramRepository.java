@@ -15,6 +15,9 @@ public interface ProgramRepository extends CrudRepository<Program, Long> {
     Optional<Program> findById(@NonNull Long id);
 
     @NonNull
+    Optional<Program> findByKodeProgram(@NonNull String kodeProgram);
+
+    @NonNull
     Page<Program> findByKodeProgramContainingIgnoreCaseAndNamaProgramContainingIgnoreCase(
             @NonNull String kodeProgram,
             @NonNull String namaProgram,

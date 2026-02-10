@@ -23,9 +23,9 @@ public class ProgramController {
         this.programService = programService;
     }
 
-    @GetMapping("detail/{id}")
-    public Program getById(@PathVariable("id") Long id) {
-        return programService.detailProgram(id);
+    @GetMapping("detail/{kodeProgram}")
+    public Program getById(@PathVariable("kodeProgram") String kodeProgram) {
+        return programService.detailProgram(kodeProgram);
     }
 
     @GetMapping("detail/get-all-programs")
@@ -60,9 +60,9 @@ public class ProgramController {
                 .toList();
     }
 
-    @PutMapping("update/{id}")
-    public Program put(@PathVariable("id") Long id, @Valid @RequestBody ProgramRequest request) {
-        return programService.ubahProgram(id, request);
+    @PutMapping("update/{kodeProgram}")
+    public Program put(@PathVariable("kodeProgram") String kodeProgram, @Valid @RequestBody ProgramRequest request) {
+        return programService.ubahProgram(kodeProgram, request);
     }
 
     @PostMapping
@@ -77,9 +77,9 @@ public class ProgramController {
         return ResponseEntity.created(location).body(saved);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{kodeProgram}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        programService.hapusProgram(id);
+    public void delete(@PathVariable("kodeProgram") String kodeProgram) {
+        programService.hapusProgram(kodeProgram);
     }
 }

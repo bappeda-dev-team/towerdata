@@ -27,9 +27,9 @@ public class ProgramService {
         return programRepository.findAll(Pageable.unpaged()).getContent();
     }
 
-    public Program detailProgram(Long id) {
-        return programRepository.findById(id)
-                .orElseThrow(() -> new ProgramNotFoundException(id));
+    public Program detailProgram(String kodeProgram) {
+        return programRepository.findByKodeProgram(kodeProgram)
+                .orElseThrow(() -> new ProgramNotFoundException(kodeProgram));
     }
 
     public Program tambahProgram(ProgramRequest request) {
@@ -41,8 +41,9 @@ public class ProgramService {
         return programRepository.save(program);
     }
 
-    public Program ubahProgram(Long id, ProgramRequest request) {
-        Program existingProgram = detailProgram(id);
+    public Program ubahProgram(String kodeProgram, ProgramRequest request) {
+        Program existingProgram = programRepository.findByKodeProgram(kodeProgram)
+                .orElseThrow(() -> new ProgramNotFoundException(kodeProgram));
 
         Program program = new Program(
                 existingProgram.id(),
@@ -55,11 +56,10 @@ public class ProgramService {
         return programRepository.save(program);
     }
 
-    public void hapusProgram(Long id) {
-        if (!programRepository.existsById(id)) {
-            throw new ProgramNotFoundException(id);
-        }
+    public void hapusProgram(String kodeProgram) {
+        Program existingProgram = programRepository.findByKodeProgram(kodeProgram)
+                .orElseThrow(() -> new ProgramNotFoundException(kodeProgram));
 
-        programRepository.deleteById(id);
+        programRepository.deleteById(existingProgram.id());
     }
 }
