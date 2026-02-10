@@ -13,22 +13,26 @@ import java.util.Optional;
 public interface KegiatanRepository extends CrudRepository<Kegiatan, Long> {
     @NonNull
     Optional<Kegiatan> findById(@NonNull Long id);
-    
+
+    @NonNull
+    Optional<Kegiatan> findByKodeKegiatan(@NonNull String kodeKegiatan);
+
+    boolean existsByKodeKegiatan(@NonNull String kodeKegiatan);
+
+    void deleteByKodeKegiatan(@NonNull String kodeKegiatan);
+
     @NonNull
     Page<Kegiatan> findByKodeKegiatanContainingIgnoreCaseAndNamaKegiatanContainingIgnoreCase(
             @NonNull String kodeKegiatan,
             @NonNull String namaKegiatan,
             @NonNull Pageable pageable
     );
-    
-    @NonNull
-    Page<Kegiatan> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
 
     @NonNull
     Page<Kegiatan> findAll(@NonNull Pageable pageable);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM kegiatan WHERE id = :id")
-    void deleteById(@NonNull Long id);
+    @Query("DELETE FROM kegiatan WHERE kode_program = :kode_program")
+    void deleteByKodeProgram(@NonNull String kodeProgram);
 }

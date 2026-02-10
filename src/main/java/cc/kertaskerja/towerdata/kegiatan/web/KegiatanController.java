@@ -24,9 +24,9 @@ public class KegiatanController {
         this.kegiatanService = kegiatanService;
     }
     
-    @GetMapping("detail/{id}")
-    public Kegiatan getById(@PathVariable("id") Long id) {
-        return kegiatanService.detailKegiatan(id);
+    @GetMapping("detail/{kodeKegiatan}")
+    public Kegiatan getByKode(@PathVariable("kodeKegiatan") String kodeKegiatan) {
+        return kegiatanService.detailKegiatan(kodeKegiatan);
     }
     
     @GetMapping("detail/get-all-kegiatans")
@@ -34,8 +34,7 @@ public class KegiatanController {
         return kegiatanService.semuaKegiatan().stream()
                 .map(kegiatan -> new KegiatanSearchResponse(
                         kegiatan.kodeKegiatan(),
-                        kegiatan.namaKegiatan(),
-                        kegiatan.penunjang()
+                        kegiatan.namaKegiatan()
                 ))
                 .toList();
     }
@@ -57,32 +56,14 @@ public class KegiatanController {
         return kegiatans.stream()
                 .map(kegiatan -> new KegiatanSearchResponse(
                         kegiatan.kodeKegiatan(),
-                        kegiatan.namaKegiatan(),
-                        kegiatan.penunjang()
-                ))
-                .toList();
-    }
-    
-    @GetMapping("detail/penunjang/cari-kegiatans")
-    public List<KegiatanSearchResponse> getPenunjangSearchData(
-            @RequestParam(value = "penunjang", required = false) Boolean penunjangFilter,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Page<Kegiatan> kegiatans = kegiatanService.getDataByPenunjangFilter(penunjangFilter, page, size);
-
-        return kegiatans.stream()
-                .map(kegiatan -> new KegiatanSearchResponse(
-                        kegiatan.kodeKegiatan(),
-                        kegiatan.namaKegiatan(),
-                        kegiatan.penunjang()
+                        kegiatan.namaKegiatan()
                 ))
                 .toList();
     }
 
-    @PutMapping("update/{id}")
-    public Kegiatan put(@PathVariable("id") Long id, @Valid @RequestBody KegiatanRequest request) {
-        return kegiatanService.ubahKegiatan(id, request);
+    @PutMapping("update/{kodeKegiatan}")
+    public Kegiatan put(@PathVariable("kodeKegiatan") String kodeKegiatan, @Valid @RequestBody KegiatanRequest request) {
+        return kegiatanService.ubahKegiatan(kodeKegiatan, request);
     }
 
     @PostMapping
@@ -97,9 +78,9 @@ public class KegiatanController {
         return ResponseEntity.created(location).body(saved);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("delete/{kodeKegiatan}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        kegiatanService.hapusKegiatan(id);
+    public void delete(@PathVariable("kodeKegiatan") String kodeKegiatan) {
+        kegiatanService.hapusKegiatan(kodeKegiatan);
     }
 }

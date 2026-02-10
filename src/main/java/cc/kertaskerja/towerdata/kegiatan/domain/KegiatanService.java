@@ -28,41 +28,28 @@ public class KegiatanService {
     public List<Kegiatan> semuaKegiatan() {
         return kegiatanRepository.findAll(Pageable.unpaged()).getContent();
     }
-    
-    public Page<Kegiatan> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return kegiatanRepository.findAll(pageable);
-        } else {
-            return kegiatanRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
 
-    public Kegiatan detailKegiatan(Long id) {
-        return kegiatanRepository.findById(id)
-                .orElseThrow(() -> new KegiatanNotFoundException(id));
+    public Kegiatan detailKegiatan(String kodeKegiatan) {
+        return kegiatanRepository.findByKodeKegiatan(kodeKegiatan)
+                .orElseThrow(() -> new KegiatanNotFoundException(kodeKegiatan));
     }
 
     public Kegiatan tambahKegiatan(KegiatanRequest request) {
         Kegiatan kegiatan = Kegiatan.of(
                 request.kodeKegiatan(),
-                request.namaKegiatan(),
-                request.kodePemda(),
-                request.penunjang()
+                request.namaKegiatan()
         );
 
         return kegiatanRepository.save(kegiatan);
     }
 
-    public Kegiatan ubahKegiatan(Long id, KegiatanRequest request) {
-        Kegiatan existingKegiatan = detailKegiatan(id);
+    public Kegiatan ubahKegiatan(String kodeKegiatan, KegiatanRequest request) {
+        Kegiatan existingKegiatan = detailKegiatan(kodeKegiatan);
 
         Kegiatan kegiatan = new Kegiatan(
                 existingKegiatan.id(),
                 request.kodeKegiatan(),
                 request.namaKegiatan(),
-                request.kodePemda(),
-                request.penunjang(),
                 existingKegiatan.createdDate(),
                 null
         );
@@ -70,11 +57,11 @@ public class KegiatanService {
         return kegiatanRepository.save(kegiatan);
     }
 
-    public void hapusKegiatan(Long id) {
-        if (!kegiatanRepository.existsById(id)) {
-            throw new KegiatanNotFoundException(id);
+    public void hapusKegiatan(String kodeKegiatan) {
+        if (!kegiatanRepository.existsByKodeKegiatan(kodeKegiatan)) {
+            throw new KegiatanNotFoundException(kodeKegiatan);
         }
 
-        kegiatanRepository.deleteById(id);
+        kegiatanRepository.deleteByKodeKegiatan(kodeKegiatan);
     }
 }

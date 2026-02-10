@@ -19,12 +19,6 @@ public record Kegiatan(
         @Column("nama_kegiatan")
         String namaKegiatan,
 
-        @Column("kode_pemda")
-        String kodePemda,
-
-        @Column("penunjang")
-        Boolean penunjang,
-
         @CreatedDate
         Instant createdDate,
 
@@ -33,16 +27,12 @@ public record Kegiatan(
 ) {
     public static Kegiatan of (
     		String kodeKegiatan,
-            String namaKegiatan,
-            String kodePemda,
-            Boolean penunjang
+            String namaKegiatan
     ) {
         return new Kegiatan(
                 null,
                 kodeKegiatan,
                 namaKegiatan,
-                kodePemda,
-                penunjang,
                 null,
                 null
         );
