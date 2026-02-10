@@ -8,7 +8,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface SubKegiatanRepository extends CrudRepository<SubKegiatan, Long> {
@@ -23,15 +22,14 @@ public interface SubKegiatanRepository extends CrudRepository<SubKegiatan, Long>
     );
 
     @NonNull
-    Page<SubKegiatan> findByPenunjang(@NonNull Boolean penunjang, @NonNull Pageable pageable);
-
-    @NonNull
     Page<SubKegiatan> findAll(@NonNull Pageable pageable);
 
-    List<SubKegiatan> findByKodeOpd(@NonNull String kodeOpd);
+    Optional<SubKegiatan> findByKodeSubKegiatan(@NonNull String kodeSubKegiatan);
+
+    boolean existsByKodeSubKegiatan(@NonNull String kodeSubKegiatan);
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM subkegiatan WHERE id = :id")
-    void deleteById(@NonNull Long id);
+    @Query("DELETE FROM subkegiatan WHERE kode_subkegiatan = :kodeSubKegiatan")
+    void deleteByKodeSubKegiatan(@NonNull String kodeSubKegiatan);
 }

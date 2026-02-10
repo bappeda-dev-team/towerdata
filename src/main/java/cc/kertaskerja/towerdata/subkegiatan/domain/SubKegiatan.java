@@ -13,20 +13,11 @@ public record SubKegiatan(
     @Id
     Long id,
 
-    @Column("kode_opd")
-    String kodeOpd,
-
     @Column("kode_subkegiatan")
     String kodeSubKegiatan,
 
     @Column("nama_subkegiatan")
     String namaSubKegiatan,
-
-    @Column("kode_pemda")
-    String kodePemda,
-
-    @Column("penunjang")
-    Boolean penunjang,
 
     @CreatedDate
     Instant createdDate,
@@ -35,19 +26,13 @@ public record SubKegiatan(
     Instant lastModifiedDate
 ) {
     public static SubKegiatan of (
-            String  kodeOpd,
             String 	kodeSubKegiatan,
-            String 	namaSubKegiatan,
-            String 	kodePemda,
-            Boolean penunjang
+            String 	namaSubKegiatan
     ) {
         return new SubKegiatan(
                 null,
-                kodeOpd,
                 kodeSubKegiatan,
                 namaSubKegiatan,
-                kodePemda,
-                penunjang,
                 null,
                 null
         );

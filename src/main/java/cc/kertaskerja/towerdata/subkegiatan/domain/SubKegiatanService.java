@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,53 +27,29 @@ public class SubKegiatanService {
         );
     }
 
-    public Page<SubKegiatan> getDataByPenunjangFilter(Boolean penunjangFilter, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (penunjangFilter == null) {
-            return subKegiatanRepository.findAll(pageable);
-        } else {
-            return subKegiatanRepository.findByPenunjang(penunjangFilter, pageable);
-        }
-    }
-
-    public SubKegiatan detailSubKegiatan(Long id) {
-        return subKegiatanRepository.findById(id)
-                .orElseThrow(() -> new SubKegiatanNotFoundException(id));
+    public SubKegiatan detailSubKegiatan(String kodeSubKegiatan) {
+        return subKegiatanRepository.findByKodeSubKegiatan(kodeSubKegiatan)
+                .orElseThrow(() -> new SubKegiatanNotFoundException(kodeSubKegiatan));
     }
 
     public SubKegiatan tambahSubKegiatan(SubKegiatan subKegiatan) {
         return subKegiatanRepository.save(subKegiatan);
     }
 
-    public SubKegiatan ubahSubKegiatan(Long id, SubKegiatan subKegiatan) {
-        if (!subKegiatanRepository.existsById(id)) {
-            throw new SubKegiatanNotFoundException(id);
+    public SubKegiatan ubahSubKegiatan(String kodeSubKegiatan, SubKegiatan subKegiatan) {
+        if (!subKegiatanRepository.existsByKodeSubKegiatan(kodeSubKegiatan)) {
+            throw new SubKegiatanNotFoundException(kodeSubKegiatan);
         }
 
         return subKegiatanRepository.save(subKegiatan);
     }
 
-    public void hapusSubKegiatan(Long id) {
-        if (!subKegiatanRepository.existsById(id)) {
-            throw new SubKegiatanNotFoundException(id);
+    public void hapusSubKegiatan(String kodeSubKegiatan) {
+        if (!subKegiatanRepository.existsByKodeSubKegiatan(kodeSubKegiatan)) {
+            throw new SubKegiatanNotFoundException(kodeSubKegiatan);
         }
 
-        subKegiatanRepository.deleteById(id);
-    }
-
-    public List<SubKegiatan> getSubKegiatanByKodeOpd(List<String> kodeOpdList) {
-        List<SubKegiatan> result = new ArrayList<>();
-        if (kodeOpdList == null) {
-            return result;
-        }
-
-        for (String kodeOpd : kodeOpdList) {
-            if (kodeOpd != null) {
-                result.addAll(subKegiatanRepository.findByKodeOpd(kodeOpd));
-            }
-        }
-
-        return result;
+        subKegiatanRepository.deleteByKodeSubKegiatan(kodeSubKegiatan);
     }
 
 }
